@@ -29,12 +29,9 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.Range;
-
-import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
 
 /**
  * This file provides basic Telop driving for a Pushbot robot.
@@ -51,16 +48,19 @@ import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Mainbot: Teleop Tank1", group="Pushbot")
+@TeleOp(name="Pushbot2: Teleop Tank", group="Pushbot")
 //@Disabled
-public class  MainbotTeleopTank_Iterative extends OpMode{
+public class Pushbot2Tele extends OpMode{
 
     /* Declare OpMode members. */
-    HardwareMatthewbot robot       = new HardwareMatthewbot(); // use the class created to define a Pushbot's hardware
-                                                         // could also use HardwarePushbotMatrix class.
+    HardwarePushbot3 robot       = new HardwarePushbot3(); // use the class created to define a Pushbot's hardware
+
+
+
+                                                           // could also use HardwarePushbotMatrix class.
     double          clawOffset  = 0.0 ;                  // Servo mid position
     final double    CLAW_SPEED  = 0.02 ;                 // sets rate to move servo
-    int x = 0;
+
     /*
      * Code to run ONCE when the driver hits INIT
      */
@@ -96,58 +96,44 @@ public class  MainbotTeleopTank_Iterative extends OpMode{
     public void loop() {
         double left;
         double right;
+  //      boolean touch;
+
+
+
+        // set the digital channel to input.
 
         // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
         left = -gamepad1.left_stick_y;
         right = -gamepad1.right_stick_y;
 
-        robot.leftFrontDrive.setPower(left);
-        robot.rightFrontDrive.setPower(right);
-        robot.leftRearDrive.setPower(left);
-        robot.rightRearDrive.setPower(right);
+        robot.leftDrive.setPower(left);
+        robot.rightDrive.setPower(right);
 
         // Use gamepad left & right Bumpers to open and close the claw
+        if (gamepad1.right_bumper)
+            clawOffset += CLAW_SPEED;
+        else if (gamepad1.left_bumper)
+            clawOffset -= CLAW_SPEED;
 
-        if (gamepad1.left_trigger>0.5)
-            x=0;
-        else if (gamepad1.right_trigger>0.5)
-        {
-            x=1;
-        }
-        else if (x == 1)
-        {
-            robot.leftClaw.setPosition(.75);
-            robot.rightClaw.setPosition(.25);
-        }
-        else if (x==0) {
-            robot.leftClaw.setPosition(.25);
-            robot.rightClaw.setPosition(.75);
-        }
-        else {
-
-            robot.leftClaw.setPosition(.5);
-            robot.rightClaw.setPosition(.5);
-        }
-
-        // Move both servos to new position. Assume servos are mirror image of each other.
-     //   clawOffset = Range.clip(clawOffset, -0.5, 0.5);
-      //  robot.leftClaw.setPosition(robot.MID_SERVO + clawOffset);
-        //robot.rightClaw.setPosition(robot.MID_SERVO - clawOffset);
+        // Move both servos to new position.  Assume servos are mirror image of each other.
+        clawOffset = Range.clip(clawOffset, -0.5, 0.5);
+        robot.leftClaw.setPosition(robot.MID_SERVO + clawOffset);
+        robot.rightClaw.setPosition(robot.MID_SERVO - clawOffset);
 
         // Use gamepad buttons to move the arm up (Y) and down (A)
-
         if (gamepad1.dpad_up)
-            robot.leftArm.setPower(1);
+            robot.leftArm.setPower(robot.ARM_UP_POWER);
         else if (gamepad1.dpad_down)
-            robot.leftArm.setPower(-.3);
+            robot.leftArm.setPower(robot.ARM_DOWN_POWER);
         else
             robot.leftArm.setPower(0.0);
 
-
         // Send telemetry message to signify robot running;
-        telemetry.addData("claw",  "Offset = %.2f", clawOffset);
+       // touch=robot.digitalTouch.getState();
+       // telemetry.addData("touch", touch);
         telemetry.addData("left",  "%.2f", left);
         telemetry.addData("right", "%.2f", right);
+        telemetry.update();
     }
 
     /*

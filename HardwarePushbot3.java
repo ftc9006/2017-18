@@ -30,7 +30,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -52,7 +51,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Servo channel:  Servo to open left claw:  "left_hand"
  * Servo channel:  Servo to open right claw: "right_hand"
  */
-public class HardwarePushbot2
+public class HardwarePushbot3
 {
     /* Public OpMode members. */
     public DcMotor  leftDrive   = null;
@@ -63,7 +62,7 @@ public class HardwarePushbot2
     public Servo    leftClaw    = null;
     public Servo    rightClaw   = null;
 
-    DigitalChannel digitalTouch;  // Hardware Device Object
+   // DigitalChannel digitalTouch;  // Hardware Device Object
 
     public static final double MID_SERVO       =  0.5 ;
     public static final double ARM_UP_POWER    =  0.45 ;
@@ -74,7 +73,7 @@ public class HardwarePushbot2
     private ElapsedTime period  = new ElapsedTime();
 
     /* Constructor */
-    public HardwarePushbot2(){
+    public HardwarePushbot3(){
 
     }
 
@@ -92,7 +91,7 @@ public class HardwarePushbot2
        // clawMotor = hwMap.get(DcMotor.class, "claw_motor");
         leftDrive.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
         rightDrive.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
-        digitalTouch = hwMap.get(DigitalChannel.class, "touch");
+     //   digitalTouch = hwMap.get(DigitalChannel.class, "touch");
 
         // Set all motors to zero power
         leftDrive.setPower(0);
@@ -105,7 +104,7 @@ public class HardwarePushbot2
 
         leftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        digitalTouch.setMode(DigitalChannel.Mode.INPUT);
+       // digitalTouch.setMode(DigitalChannel.Mode.INPUT);
 
         leftArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
       //  clawMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
