@@ -68,7 +68,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
  * is explained in {@link ConceptVuforiaNavigation}.
  */
 
-@Autonomous(name="Pushbot1: Blue Auto", group ="Concept")
+@Autonomous(name="Pushbot1: Blue Auto Encode", group ="Concept")
 //@Disabled
 public class ConceptVuMarkIdentification extends LinearOpMode {
 
@@ -85,6 +85,7 @@ public class ConceptVuMarkIdentification extends LinearOpMode {
             (WHEEL_DIAMETER_INCHES * 3.1415);
     static final double     DRIVE_SPEED             = 0.6;
     static final double     TURN_SPEED              = 0.5;
+    int x = 0;
     /**
      * {@link #vuforia} is the variable we will use to store our instance of the Vuforia
      * localization engine.
@@ -106,7 +107,8 @@ public class ConceptVuMarkIdentification extends LinearOpMode {
                 robot.rightDrive.getCurrentPosition());
         telemetry.update();
 
-
+        robot.leftClaw.setPosition(0.7);            // S4: Stop and close the claw.
+        robot.rightClaw.setPosition(0.3);
 
 
         /*
@@ -196,16 +198,20 @@ public class ConceptVuMarkIdentification extends LinearOpMode {
                     double rZ = rot.thirdAngle;
                 }
                 if (vuMark == RelicRecoveryVuMark.RIGHT) {
-                    encoderDrive(DRIVE_SPEED,  48,  48, 5.0);  // S1: Forward 47 Inches with 5 Sec timeout
-                    //encoderDrive(TURN_SPEED,   12, -12, 4.0);  // S2: Turn Right 12 Inches with 4 Sec timeout
-                    //encoderDrive(DRIVE_SPEED, -24, -24, 4.0);  // S3: Reverse 24 Inches with 4 Sec timeout
+                    if(x==0) {
+                        encoderDrive(DRIVE_SPEED, 30, 30, 3.0);  // S1: Forward 38 Inches with 3 Sec timeout
+                        encoderDrive(TURN_SPEED,   -8, 8, 1.0);  // S2: Turn Left 12 Inches with 4 Sec timeout
+                        encoderDrive(DRIVE_SPEED, 2, 2, 0.5);  // S3: Reverse 2 Inches with .5 Sec timeout
 
-                    robot.leftClaw.setPosition(1.0);            // S4: Stop and close the claw.
-                    robot.rightClaw.setPosition(0.0);
-                    sleep(1000);     // pause for servos to move
-
-                    telemetry.addData("Path", "Complete");
-                    telemetry.update();
+                        robot.leftClaw.setPosition(0.0);            // S4: Stop and close the claw.
+                        robot.rightClaw.setPosition(1.0);
+                        sleep(1000);     // pause for servos to move
+                        //encoderDrive(DRIVE_SPEED, -1, -1, 0.5);
+                        robot.leftClaw.setPosition(0.5);            // S4: Stop and close the claw.
+                        robot.rightClaw.setPosition(0.5);
+                        telemetry.addData("Path", "Complete");
+                        telemetry.update();
+                    } x++;
                 }
             }
             else {
