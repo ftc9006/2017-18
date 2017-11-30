@@ -29,6 +29,9 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import android.graphics.Color;
+
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cColorSensor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.Range;
@@ -55,8 +58,8 @@ public class Pushbot2Tele extends OpMode{
     /* Declare OpMode members. */
     HardwarePushbot3 robot       = new HardwarePushbot3(); // use the class created to define a Pushbot's hardware
 
-
-
+    float hsvValues[] = {0F,0F,0F};
+    boolean on=true;
                                                            // could also use HardwarePushbotMatrix class.
     double          clawOffset  = 0.0 ;                  // Servo mid position
     final double    CLAW_SPEED  = 0.02 ;                 // sets rate to move servo
@@ -97,7 +100,7 @@ public class Pushbot2Tele extends OpMode{
         double left;
         double right;
   //      boolean touch;
-
+        robot.colorSensor.enableLed(true);
 
 
         // set the digital channel to input.
@@ -120,10 +123,20 @@ public class Pushbot2Tele extends OpMode{
         robot.leftClaw.setPosition(robot.MID_SERVO + clawOffset);
         robot.rightClaw.setPosition(robot.MID_SERVO - clawOffset);
 
+
+        if(gamepad1.b)
+        robot.jewel.setPosition(.35);
+        if(gamepad1.a)
+            robot.jewel.setPosition(1);
+
+
+
+
+
         // Use gamepad buttons to move the arm up (Y) and down (A)
         if (gamepad1.dpad_up)
             robot.leftArm.setPower(robot.ARM_UP_POWER);
-        else if (gamepad1.dpad_down)
+        else if (gamepad1.dpad_down && robot.digitalTouch.getState() == false)
             robot.leftArm.setPower(robot.ARM_DOWN_POWER);
         else
             robot.leftArm.setPower(0.0);
@@ -131,8 +144,12 @@ public class Pushbot2Tele extends OpMode{
         // Send telemetry message to signify robot running;
        // touch=robot.digitalTouch.getState();
        // telemetry.addData("touch", touch);
-        telemetry.addData("left",  "%.2f", left);
-        telemetry.addData("right", "%.2f", right);
+     //   telemetry.addData("left",  "%.2f", left);
+       // telemetry.addData("right", "%.2f", right);
+        telemetry.addData("Color", robot.colorSensor.readUnsignedByte(ModernRoboticsI2cColorSensor.Register.COLOR_NUMBER));
+               // telemetry.addData("Red  ", robot.colorSensor.red());
+        //telemetry.addData("Green", robot.colorSensor.green());
+       // telemetry.addData("Blue ", robot.colorSensor.blue());
         telemetry.update();
     }
 

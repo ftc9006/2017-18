@@ -29,6 +29,8 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cColorSensor;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -61,8 +63,10 @@ public class HardwarePushbot3
     public DcMotor  clawMotor   = null;
     public Servo    leftClaw    = null;
     public Servo    rightClaw   = null;
-
+    public Servo    jewel       = null;
+    public ModernRoboticsI2cColorSensor colorSensor = null;
    // DigitalChannel digitalTouch;  // Hardware Device Object
+   DigitalChannel digitalTouch;
 
     public static final double MID_SERVO       =  0.5 ;
     public static final double ARM_UP_POWER    =  0.45 ;
@@ -91,7 +95,13 @@ public class HardwarePushbot3
        // clawMotor = hwMap.get(DcMotor.class, "claw_motor");
         leftDrive.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
         rightDrive.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
-     //   digitalTouch = hwMap.get(DigitalChannel.class, "touch");
+       digitalTouch = hwMap.get(DigitalChannel.class, "touch");
+
+        // get a reference to our ColorSensor object.
+        colorSensor = hwMap.get(ModernRoboticsI2cColorSensor.class, "color");
+
+        // Set the LED in the beginning
+        colorSensor.enableLed(false);
 
         // Set all motors to zero power
         leftDrive.setPower(0);
@@ -111,8 +121,10 @@ public class HardwarePushbot3
         // Define and initialize ALL installed servos.
         leftClaw  = hwMap.get(Servo.class, "left_hand");
         rightClaw = hwMap.get(Servo.class, "right_hand");
+        jewel = hwMap.get(Servo.class, "ball_arm");
         leftClaw.setPosition(MID_SERVO);
         rightClaw.setPosition(MID_SERVO);
+        jewel.setPosition(1);
     }
  }
 

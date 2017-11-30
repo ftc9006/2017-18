@@ -199,7 +199,41 @@ public class ConceptVuMarkIdentification extends LinearOpMode {
                 }
                 if (vuMark == RelicRecoveryVuMark.RIGHT) {
                     if(x==0) {
-                        encoderDrive(DRIVE_SPEED, 30, 30, 3.0);  // S1: Forward 38 Inches with 3 Sec timeout
+                        encoderDrive(DRIVE_SPEED, 32, 32, 2.1);  // S1: Forward 27 Inches with 3 Sec timeout
+                        encoderDrive(TURN_SPEED,   -15, 15, 1.0);  // S2: Turn Left 8 Inches with 4 Sec timeout
+                        encoderDrive(DRIVE_SPEED, 2, 2, 0.5);  // S3: Reverse 2 Inches with .5 Sec timeout
+
+                        robot.leftClaw.setPosition(0.0);            // S4: Stop and close the claw.
+                        robot.rightClaw.setPosition(1.0);
+                        sleep(1000);     // pause for servos to move
+                        //encoderDrive(DRIVE_SPEED, -1, -1, 0.5);
+                        robot.leftClaw.setPosition(0.5);            // S4: Stop and close the claw.
+                        robot.rightClaw.setPosition(0.5);
+                        telemetry.addData("Path", "Complete");
+                        telemetry.update();
+                    } x++;
+                }
+                if (vuMark == RelicRecoveryVuMark.CENTER) {
+                    if(x==0) {
+                        encoderDrive(DRIVE_SPEED, 31, 31, 2.1);  // S1: Forward 38 Inches with 3 Sec timeout
+                        encoderDrive(TURN_SPEED,   -2, 2, .5);  // S2: Turn Left 12 Inches with 4 Sec timeout
+                        encoderDrive(DRIVE_SPEED, -2, -2, 0.5);
+                        encoderDrive(TURN_SPEED,   -2, 2, .35);
+                        encoderDrive(DRIVE_SPEED, 2, 2, 0.5);  // S3: Reverse 2 Inches with .5 Sec timeout
+
+                        robot.leftClaw.setPosition(0.0);            // S4: Stop and close the claw.
+                        robot.rightClaw.setPosition(1.0);
+                        sleep(1000);     // pause for servos to move
+                        //encoderDrive(DRIVE_SPEED, -1, -1, 0.5);
+                        robot.leftClaw.setPosition(0.5);            // S4: Stop and close the claw.
+                        robot.rightClaw.setPosition(0.5);
+                        telemetry.addData("Path", "Complete");
+                        telemetry.update();
+                    } x++;
+                }
+                if (vuMark == RelicRecoveryVuMark.LEFT) {
+                    if(x==0) {
+                        encoderDrive(DRIVE_SPEED, 30, 30, 1.8);  // S1: Forward 38 Inches with 3 Sec timeout
                         encoderDrive(TURN_SPEED,   -8, 8, 1.0);  // S2: Turn Left 12 Inches with 4 Sec timeout
                         encoderDrive(DRIVE_SPEED, 2, 2, 0.5);  // S3: Reverse 2 Inches with .5 Sec timeout
 
