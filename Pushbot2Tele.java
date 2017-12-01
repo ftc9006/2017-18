@@ -29,6 +29,9 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import android.graphics.Color;
+
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cColorSensor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.Range;
@@ -55,8 +58,13 @@ public class Pushbot2Tele extends OpMode{
     /* Declare OpMode members. */
     HardwarePushbot3 robot       = new HardwarePushbot3(); // use the class created to define a Pushbot's hardware
 
+    float hsvValues[] = {0F,0F,0F};
+    boolean on=true;
 
-
+    byte[] colorCache;
+    byte[] red;
+    byte[] green;
+    byte[] blue;
                                                            // could also use HardwarePushbotMatrix class.
     double          clawOffset  = 0.0 ;                  // Servo mid position
     final double    CLAW_SPEED  = 0.02 ;                 // sets rate to move servo
@@ -97,9 +105,9 @@ public class Pushbot2Tele extends OpMode{
         double left;
         double right;
   //      boolean touch;
+       // robot.colorSensor.enableLed(true);
 
-
-
+        robot.colorRead.write8(3,0);//turn on LED for color sensor
         // set the digital channel to input.
 
         // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
@@ -120,10 +128,20 @@ public class Pushbot2Tele extends OpMode{
         robot.leftClaw.setPosition(robot.MID_SERVO + clawOffset);
         robot.rightClaw.setPosition(robot.MID_SERVO - clawOffset);
 
+
+        if(gamepad1.b)
+        robot.jewel.setPosition(.35);
+        if(gamepad1.a)
+            robot.jewel.setPosition(1);
+
+
+
+
+
         // Use gamepad buttons to move the arm up (Y) and down (A)
         if (gamepad1.dpad_up)
             robot.leftArm.setPower(robot.ARM_UP_POWER);
-        else if (gamepad1.dpad_down)
+        else if (gamepad1.dpad_down && robot.digitalTouch.getState() == false)
             robot.leftArm.setPower(robot.ARM_DOWN_POWER);
         else
             robot.leftArm.setPower(0.0);
@@ -131,8 +149,18 @@ public class Pushbot2Tele extends OpMode{
         // Send telemetry message to signify robot running;
        // touch=robot.digitalTouch.getState();
        // telemetry.addData("touch", touch);
-        telemetry.addData("left",  "%.2f", left);
-        telemetry.addData("right", "%.2f", right);
+     //   telemetry.addData("left",  "%.2f", left);
+       // telemetry.addData("right", "%.2f", right);
+
+        //colorCache = robot.colorRead.read(0x04,1);
+        red = robot.colorRead.read(0x05,1);
+        green = robot.colorRead.read(0x06,1);
+        blue = robot.colorRead.read(0x07,1);
+        //telemetry.addData("Color", colorCache[0] & 0xFF);
+        telemetry.addData("red", red[0] );
+        telemetry.addData("green", green[0]);
+        telemetry.addData("blue", blue[0] );
+
         telemetry.update();
     }
 
