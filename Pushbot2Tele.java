@@ -35,7 +35,7 @@ import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cColorSensor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.Range;
-
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 /**
  * This file provides basic Telop driving for a Pushbot robot.
  * The code is structured as an Iterative OpMode
@@ -52,7 +52,7 @@ import com.qualcomm.robotcore.util.Range;
  */
 
 @TeleOp(name="Pushbot2: Teleop Tank", group="Pushbot")
-//@Disabled
+@Disabled
 public class Pushbot2Tele extends OpMode{
 
     /* Declare OpMode members. */

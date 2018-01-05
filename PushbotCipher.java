@@ -68,7 +68,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
  */
 
 @TeleOp(name="Pushbot: Cipher", group="Pushbot")
-//@Disabled
+@Disabled
 public class PushbotCipher extends OpMode{
 
     /* Declare OpMode members. */

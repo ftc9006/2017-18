@@ -52,14 +52,12 @@ import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
  */
 
 @TeleOp(name="Mainbot: Teleop Tank1", group="Pushbot")
-//@Disabled
+@Disabled
 public class  MainbotTeleopTank_Iterative extends OpMode{
 
     /* Declare OpMode members. */
     HardwareMatthewbot robot       = new HardwareMatthewbot(); // use the class created to define a Pushbot's hardware
-                                                         // could also use HardwarePushbotMatrix class.
-    double          clawOffset  = 0.0 ;                  // Servo mid position
-    final double    CLAW_SPEED  = 0.02 ;                 // sets rate to move servo
+    // could also use HardwarePushbotMatrix class.
     int x = 0;
     /*
      * Code to run ONCE when the driver hits INIT
@@ -95,59 +93,89 @@ public class  MainbotTeleopTank_Iterative extends OpMode{
     @Override
     public void loop() {
         double left;
-        double right;
+        double Right, Left, sideRight, sideLeft;
 
         // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
-        left = -gamepad1.left_stick_y;
-        right = -gamepad1.right_stick_y;
+        Right = -gamepad1.left_stick_y;
+        Left = -gamepad1.right_stick_y;
+        sideRight= gamepad1.right_stick_x;
+        sideLeft=gamepad1.left_stick_x;
 
-        robot.leftFrontDrive.setPower(left);
-        robot.rightFrontDrive.setPower(right);
-        robot.leftRearDrive.setPower(left);
-        robot.rightRearDrive.setPower(right);
 
-        // Use gamepad left & right Bumpers to open and close the claw
-
-        if (gamepad1.left_trigger>0.5)
-            x=0;
-        else if (gamepad1.right_trigger>0.5)
+        if(sideLeft!=0)
         {
-            x=1;
+            robot.leftFrontDrive.setPower(sideLeft*-1);
+            robot.rightFrontDrive.setPower(sideLeft);
+            robot.leftRearDrive.setPower(sideLeft);
+            robot.rightRearDrive.setPower(sideLeft*-1);
+
         }
-        else if (x == 1)
+        else if(Left>0&&sideRight>0)
         {
-            robot.leftClaw.setPosition(.75);
-            robot.rightClaw.setPosition(.25);
+            robot.leftFrontDrive.setPower(1-sideRight);
+            robot.rightFrontDrive.setPower(Left);
+            robot.leftRearDrive.setPower(1-sideRight);
+            robot.rightRearDrive.setPower(Left);
         }
-        else if (x==0) {
-            robot.leftClaw.setPosition(.25);
-            robot.rightClaw.setPosition(.75);
+        else if(Left>0&&sideRight<0)
+        {
+            robot.leftFrontDrive.setPower(Left);
+            robot.rightFrontDrive.setPower(1+sideRight);
+            robot.leftRearDrive.setPower(Left);
+            robot.rightRearDrive.setPower(1+sideRight);
         }
-        else {
-
-            robot.leftClaw.setPosition(.5);
-            robot.rightClaw.setPosition(.5);
+        else if(Left<0&&sideRight<0)
+        {
+            robot.leftFrontDrive.setPower(1+sideRight);
+            robot.rightFrontDrive.setPower(Left);
+            robot.leftRearDrive.setPower(1+sideRight);
+            robot.rightRearDrive.setPower(Left);
         }
+        else if(Left<0&&sideRight>0)
+        {
+            robot.leftFrontDrive.setPower(Left);
+            robot.rightFrontDrive.setPower(1-sideRight);
+            robot.leftRearDrive.setPower(Left);
+            robot.rightRearDrive.setPower(1-sideRight);
+        }
+        else if(Left==0&&sideRight!=0)
+        {
+            robot.leftFrontDrive.setPower(sideRight);
+            robot.rightFrontDrive.setPower(sideRight*-1);
+            robot.leftRearDrive.setPower(sideRight);
+            robot.rightRearDrive.setPower(sideRight*-1);
+        }
+        else if(Left!=0)
+        {
+            robot.leftFrontDrive.setPower(Left);
+            robot.rightFrontDrive.setPower(Left);
+            robot.leftRearDrive.setPower(Left);
+            robot.rightRearDrive.setPower(Left);
 
-        // Move both servos to new position. Assume servos are mirror image of each other.
-     //   clawOffset = Range.clip(clawOffset, -0.5, 0.5);
-      //  robot.leftClaw.setPosition(robot.MID_SERVO + clawOffset);
-        //robot.rightClaw.setPosition(robot.MID_SERVO - clawOffset);
-
-        // Use gamepad buttons to move the arm up (Y) and down (A)
-
-        if (gamepad1.dpad_up)
-            robot.leftArm.setPower(1);
-        else if (gamepad1.dpad_down)
-            robot.leftArm.setPower(-.3);
+        }
+        else if(Right!=0)
+        {
+            robot.leftFrontDrive.setPower(Right);
+            robot.rightFrontDrive.setPower(Right);
+            robot.leftRearDrive.setPower(Right);
+            robot.rightRearDrive.setPower(Right);
+        }
         else
-            robot.leftArm.setPower(0.0);
+        {
+            robot.leftFrontDrive.setPower(0);
+            robot.rightFrontDrive.setPower(0);
+            robot.leftRearDrive.setPower(0);
+            robot.rightRearDrive.setPower(0);
+
+        }
 
 
         // Send telemetry message to signify robot running;
-        telemetry.addData("claw",  "Offset = %.2f", clawOffset);
-        telemetry.addData("left",  "%.2f", left);
-        telemetry.addData("right", "%.2f", right);
+        //  telemetry.addData("claw",  "Offset = %.2f", clawOffset);
+        telemetry.addData("sideright",  "%.2f", sideRight);
+        telemetry.addData("right", "%.2f", Left);
+        //    telemetry.addData("sideright",  "%.2f", sideRight);
+        //  telemetry.addData("left", "%.2f", sideLeft);
     }
 
     /*

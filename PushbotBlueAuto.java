@@ -48,7 +48,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefau
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 import static org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark.*;
-
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 /**
  * This OpMode illustrates the basics of using the Vuforia engine to determine
  * the identity of Vuforia VuMarks encountered on the field. The code is structured as
@@ -69,7 +69,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryV
  */
 
 @Autonomous(name="Auto: Pushbot Blue", group ="Concept")
-//@Disabled
+@Disabled
 public class PushbotBlueAuto extends LinearOpMode {
 
     HardwarePushbot2 robot       = new HardwarePushbot2();

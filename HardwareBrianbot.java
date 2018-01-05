@@ -29,15 +29,9 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.sun.tools.javac.tree.DCTree;
 
 /**
  * This is NOT an opmode.
@@ -55,33 +49,26 @@ import com.sun.tools.javac.tree.DCTree;
  * Servo channel:  Servo to open left claw:  "left_hand"
  * Servo channel:  Servo to open right claw: "right_hand"
  */
-public class HardwareMatthewbot
+public class HardwareBrianbot
 {
     /* Public OpMode members. */
     public DcMotor  leftFrontDrive   = null;
     public DcMotor  rightFrontDrive  = null;
     public DcMotor  leftRearDrive  = null;
     public DcMotor  rightRearDrive  = null;
-    public DcMotor  leftStageOne   = null; //Cube Collection Mechanism
-    public DcMotor  rightStageOne   = null;//Cube Collection Mechanism
-    public DcMotor  relicMotor = null;// Scissor Jack
-    public Servo    leftBumper = null;
-    public Servo    rightBumper = null;
-    public Servo    relicServo = null;
-    public Servo    relicDropperServo = null;
-    public Servo    leftStageTwo = null;
-    public Servo    rightStageTwo = null;
-    public CRServo    ramp = null;
-    public Servo    colorDrop = null;
-    ColorSensor sensorColor;
-    DistanceSensor sensorDistance;
+    public DcMotor  leftPhaseOne   = null;
+    public DcMotor  rightPhaseOne   = null;
+    //public DcMotor relicMotor = null;
+    //public Servo    relicServo = null;
+    //public Servo    relicDropperServo = null;
+
 
     /* local OpMode members. */
     HardwareMap hwMap           =  null;
     private ElapsedTime period  = new ElapsedTime();
 
     /* Constructor */
-    public HardwareMatthewbot(){
+    public HardwareBrianbot(){
 
     }
 
@@ -91,45 +78,30 @@ public class HardwareMatthewbot
         hwMap = ahwMap;
 
         // Define and Initialize Motors
-        leftFrontDrive  = hwMap.get(DcMotor.class, "lfd");
-        rightFrontDrive = hwMap.get(DcMotor.class, "rfd");
-        leftRearDrive = hwMap.get(DcMotor.class, "lrd");
-        rightRearDrive = hwMap.get(DcMotor.class, "rrd");
-        leftStageOne = hwMap.get(DcMotor.class, "lp1");
-        rightStageOne = hwMap.get(DcMotor.class, "rp1");
-      //  leftBumper = hwMap.get(Servo.class, "lb");
-       // rightBumper = hwMap.get(Servo.class, "rbumper");
-        //relicMotor = hwMap.get(DcMotor.class, "rmotor");
-        sensorColor = hwMap.get(ColorSensor.class, "sensor1");
-        sensorDistance = hwMap.get(DistanceSensor.class, "sensor1");
-    //   relicServo = hwMap.get(Servo.class, "rservo");
-  //     relicDropperServo = hwMap.get(Servo.class, "rdservo");
-        leftStageTwo = hwMap.get(Servo.class, "lp2");
-        rightStageTwo = hwMap.get(Servo.class, "rp2");
-        colorDrop = hwMap.get(Servo.class, "cd");
-        ramp = hwMap.get(CRServo.class, "r");
-
+        leftFrontDrive  = hwMap.get(DcMotor.class, "lfdrive");
+        rightFrontDrive = hwMap.get(DcMotor.class, "rfdrive");
+        leftRearDrive = hwMap.get(DcMotor.class, "lrdrive");
+        rightRearDrive = hwMap.get(DcMotor.class, "rrdrive");
+        leftPhaseOne = hwMap.get(DcMotor.class, "leftp1");
+        rightPhaseOne = hwMap.get(DcMotor.class, "rightp1");
+       // relicMotor = hwMap.get(DcMotor.class, "rmotor");
+       // relicServo = hwMap.get(Servo.class, "rservo");
+       // relicDropperServo = hwMap.get(Servo.class, "rdservo");
         leftFrontDrive.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
         rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
         leftRearDrive.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
         rightRearDrive.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
-        leftStageOne.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
-        rightStageOne.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
+        leftPhaseOne.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
+        rightPhaseOne.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
 
-//        leftStageOne.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-  //      rightStageOne.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         // Set all motors to zero power
         leftFrontDrive.setPower(0);
         rightFrontDrive.setPower(0);
         leftRearDrive.setPower(0);
         rightRearDrive.setPower(0);
-        leftStageOne.setPower(0);
-        rightStageOne.setPower(0);
-        ramp.setPower(0);
-        leftStageTwo.setPosition(.25);
-        rightStageTwo.setPosition(.75);
-        colorDrop.setPosition(.45);
-       // relicMotor.setPower(0);
+        leftPhaseOne.setPower(0);
+        rightPhaseOne.setPower(0);
+        //relicMotor.setPower(0);
         //relicServo.setPosition(0);
         //relicDropperServo.setPosition(53/255);
 
@@ -138,8 +110,8 @@ public class HardwareMatthewbot
         leftRearDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightRearDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         //relicMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        leftStageOne.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightStageOne.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftPhaseOne.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightPhaseOne.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
  }
 
