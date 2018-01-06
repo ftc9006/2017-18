@@ -84,7 +84,7 @@ public class MainbotAutoBlueLeft extends LinearOpMode {
             (WHEEL_DIAMETER_INCHES * 3.1415);
     static final double     DRIVE_SPEED             = 0.6;
     static final double     TURN_SPEED              = 0.5;
-    static int x = 0;
+    static int x = 0,y=0;
     static int position=0;
     static double distance=0;
 
@@ -179,9 +179,12 @@ public class MainbotAutoBlueLeft extends LinearOpMode {
         while (opModeIsActive()) {
 
 
-
-
-
+            if(y==0) {
+                robot.ramp.setPower(1);
+                sleep(1500);
+                robot.ramp.setPower(0);
+                y=1;
+            }
 
             /**
              *
@@ -189,7 +192,8 @@ public class MainbotAutoBlueLeft extends LinearOpMode {
              *
              */
             RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
-            if (vuMark != RelicRecoveryVuMark.UNKNOWN&&x==0) {
+            if (x==0)
+           {
 
                 /* Found an instance of the template. In the actual game, you will probably
                  * loop until this condition occurs, then move on to act accordingly depending
@@ -218,18 +222,20 @@ public class MainbotAutoBlueLeft extends LinearOpMode {
                     double rY = rot.secondAngle;
                     double rZ = rot.thirdAngle;
                 }
-                if (vuMark == RelicRecoveryVuMark.RIGHT) {
-                   position=1;
-                    vuMark = RelicRecoveryVuMark.UNKNOWN;
-                }
-                if (vuMark == RelicRecoveryVuMark.CENTER) {
-                   position=2;
-                    vuMark = RelicRecoveryVuMark.UNKNOWN;
-                }
-                if (vuMark == RelicRecoveryVuMark.LEFT) {
-                   position=3;
-                    vuMark = RelicRecoveryVuMark.UNKNOWN;
-                }
+            if (vuMark == RelicRecoveryVuMark.RIGHT) {
+                position=1;
+                vuMark = RelicRecoveryVuMark.UNKNOWN;
+            }
+            else if (vuMark == RelicRecoveryVuMark.CENTER) {
+                position=2;
+                vuMark = RelicRecoveryVuMark.UNKNOWN;
+            }
+            else if (vuMark == RelicRecoveryVuMark.LEFT) {
+                position=3;
+                vuMark = RelicRecoveryVuMark.UNKNOWN;
+            }
+            else
+                position =2;
                 /**
                  *
                  * END Scan cipher to get LEFT CENTER or RIGHT
@@ -244,7 +250,7 @@ public class MainbotAutoBlueLeft extends LinearOpMode {
                  */
 
                 robot.colorDrop.setPosition(1);
-                sleep(300);
+                sleep(500);
 
                 Color.RGBToHSV((int) (robot.sensorColor.red() * SCALE_FACTOR),
                         (int) (robot.sensorColor.green() * SCALE_FACTOR),
@@ -261,7 +267,7 @@ public class MainbotAutoBlueLeft extends LinearOpMode {
                 telemetry.addData("Blue ", robot.sensorColor.blue());
                 telemetry.addData("Hue", hsvValues[0]);
 
-                if(robot.sensorColor.red()<robot.sensorColor.blue())
+                if(robot.sensorColor.red()>robot.sensorColor.blue())
                 {
                     //forward toward red
                     robot.leftFrontDrive.setPower(.45);
@@ -269,12 +275,13 @@ public class MainbotAutoBlueLeft extends LinearOpMode {
                     robot.leftRearDrive.setPower(.45);
                     robot.rightRearDrive.setPower(.45);
 
-                    sleep(100);
+                    sleep(200);
 
                     robot.leftFrontDrive.setPower(0);
                     robot.rightFrontDrive.setPower(0);
                     robot.leftRearDrive.setPower(0);
                     robot.rightRearDrive.setPower(0);
+                    robot.colorDrop.setPosition(0.1);
 
                     sleep(360);
 
@@ -283,7 +290,7 @@ public class MainbotAutoBlueLeft extends LinearOpMode {
                     robot.leftRearDrive.setPower(-.45);
                     robot.rightRearDrive.setPower(-.45);
 
-                    sleep(100);
+                    sleep(200);
 
                     robot.leftFrontDrive.setPower(0);
                     robot.rightFrontDrive.setPower(0);
@@ -298,12 +305,13 @@ public class MainbotAutoBlueLeft extends LinearOpMode {
                     robot.leftRearDrive.setPower(-.45);
                     robot.rightRearDrive.setPower(-.45);
 
-                    sleep(100);
+                    sleep(200);
 
                     robot.leftFrontDrive.setPower(0);
                     robot.rightFrontDrive.setPower(0);
                     robot.leftRearDrive.setPower(0);
                     robot.rightRearDrive.setPower(0);
+                    robot.colorDrop.setPosition(0.1);
 
                     sleep(360);
 
@@ -312,7 +320,7 @@ public class MainbotAutoBlueLeft extends LinearOpMode {
                     robot.leftRearDrive.setPower(.45);
                     robot.rightRearDrive.setPower(.45);
 
-                    sleep(100);
+                    sleep(200);
 
                     robot.leftFrontDrive.setPower(0);
                     robot.rightFrontDrive.setPower(0);
@@ -320,9 +328,6 @@ public class MainbotAutoBlueLeft extends LinearOpMode {
                     robot.rightRearDrive.setPower(0);
                 }
 
-
-                robot.colorDrop.setPosition(0.1);
-                sleep(5000);
                 /**
                  *   END Drop color sensor  knock off jewel
                  *   raise color sensor
@@ -555,9 +560,7 @@ public class MainbotAutoBlueLeft extends LinearOpMode {
                 }
 
             }
-            else {
-                telemetry.addData("VuMark", "not visible");
-            }
+
 
             telemetry.update();
         }

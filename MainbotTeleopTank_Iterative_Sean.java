@@ -81,6 +81,7 @@ public class MainbotTeleopTank_Iterative_Sean extends OpMode{
      //   robot.leftBumper.setPosition(.5);
         robot.rightStageTwo.setPosition(.5);
         robot.leftStageTwo.setPosition(.5);
+        robot.colorDrop.setPosition(0.35);
       //  robot.rightBumper.setPosition(.7);
 
         // Send telemetry message to signify robot waiting;
@@ -107,7 +108,7 @@ public class MainbotTeleopTank_Iterative_Sean extends OpMode{
     @Override
     public void loop() {
 //        double left;
-
+        robot.colorDrop.setPosition(0.35);
 
         double Righty, Lefty, sideRight, sideLeft;
         double phaseUp;
@@ -128,15 +129,15 @@ public class MainbotTeleopTank_Iterative_Sean extends OpMode{
         straffeR = gamepad1.left_bumper;
         straffeL2 = gamepad2.right_bumper;
         straffeR2 = gamepad2.left_bumper;
-        turnL = gamepad1.left_trigger;
-        turnR=gamepad1.left_trigger;
+        //turnL = gamepad1.left_trigger;
+        //turnR= gamepad1.left_trigger;
 
         Lefty2 = gamepad1.left_stick_y;
         Righty2 = gamepad1.right_stick_y;
         sideRight2= gamepad1.right_stick_x;
         sideLeft2=gamepad1.left_stick_x;
-        phaseUp2 = gamepad1.right_trigger;
-        phaseDown2 = gamepad1.left_trigger;
+        //phaseUp2 = gamepad1.right_trigger;
+        //phaseDown2 = gamepad1.left_trigger;
 
 
 
@@ -176,10 +177,10 @@ public class MainbotTeleopTank_Iterative_Sean extends OpMode{
         }
         else if(Righty==0&&sideRight!=0)
         {
-            robot.leftFrontDrive.setPower(sideRight*-1);
-            robot.rightFrontDrive.setPower(sideRight);
-            robot.leftRearDrive.setPower(sideRight*-1);
-            robot.rightRearDrive.setPower(sideRight);
+            robot.leftFrontDrive.setPower(sideRight*-.7);
+            robot.rightFrontDrive.setPower(sideRight*.7);
+            robot.leftRearDrive.setPower(sideRight*-.7);
+            robot.rightRearDrive.setPower(sideRight*.7);
         }
         else if(Righty<0&&sideRight==0)
         {
@@ -219,18 +220,6 @@ public class MainbotTeleopTank_Iterative_Sean extends OpMode{
             robot.leftRearDrive.setPower(.2);
             robot.rightRearDrive.setPower(-.2);
         }
-        else if (turnL>0) {
-            robot.leftFrontDrive.setPower(-.25);
-            robot.rightFrontDrive.setPower(-.45);
-            robot.leftRearDrive.setPower(-.25);
-            robot.rightRearDrive.setPower(-.45);
-        }
-        else if (turnR>0) {
-            robot.leftFrontDrive.setPower(-.45);
-            robot.rightFrontDrive.setPower(-.25);
-            robot.leftRearDrive.setPower(-.45);
-            robot.rightRearDrive.setPower(-.25);
-        }
         else
         {
             robot.leftFrontDrive.setPower(0);
@@ -240,40 +229,24 @@ public class MainbotTeleopTank_Iterative_Sean extends OpMode{
 
         }
 
-        if (phaseDown < 0.5&& phaseDown!=0) {
-            robot.leftStageOne.setPower(.5);
-            robot.rightStageOne.setPower(.5);
-        }
-        else if (phaseDown > 0.5) {
+
+        ///player 1
+        if ((phaseDown >0)) {
             robot.leftStageOne.setPower(1);
             robot.rightStageOne.setPower(1);
         }
-        else {
-            robot.rightStageOne.setPower(0);
-            robot.leftStageOne.setPower(0);
-        }
-        if (phaseUp < 0.5&& phaseUp!=0) {
-            robot.leftStageOne.setPower(-.5);
-            robot.rightStageOne.setPower(-.5);
-        }
-        else if (phaseDown > 0.5) {
+
+        else if ((phaseUp >0)) {
             robot.leftStageOne.setPower(-1);
             robot.rightStageOne.setPower(-1);
         }
+
         else {
             robot.rightStageOne.setPower(0);
             robot.leftStageOne.setPower(0);
         }
 
-        if (gamepad1.dpad_up){
-            robot.ramp.setPower(1);
-        }
-        else if(gamepad1.dpad_down){
-            robot.ramp.setPower(-1);
-        }
-        else{
-            robot.ramp.setPower(0);
-        }
+
         if (gamepad1.y){
             robot.leftStageTwo.setPosition(1);
             robot.rightStageTwo.setPosition(0.1);
@@ -287,54 +260,17 @@ public class MainbotTeleopTank_Iterative_Sean extends OpMode{
             robot.leftStageTwo.setPosition(0.12);
             robot.rightStageTwo.setPosition(.98);
         }
-
-        if (phaseDown != 0) {
-            robot.leftStageOne.setPower(1);
-            robot.rightStageOne.setPower(1);
-        } else {
-            robot.rightStageOne.setPower(0);
-            robot.leftStageOne.setPower(0);
-        }
-        if (phaseUp != 0) {
-            robot.leftStageOne.setPower(-1);
-            robot.rightStageOne.setPower(-1);
-        } else {
-            robot.leftStageOne.setPower(0);
-            robot.rightStageOne.setPower(0);
+        if (gamepad1.b){
+            robot.colorDrop.setPosition(.35);
         }
 
 
-        //   PLAYER 2
 
-        if (phaseDown2 < 0.5&& phaseDown2!=0) {
-            robot.leftStageOne.setPower(.5);
-            robot.rightStageOne.setPower(.5);
-        }
-        else if (phaseDown2 > 0.5) {
-            robot.leftStageOne.setPower(1);
-            robot.rightStageOne.setPower(1);
-        }
-        else {
-            robot.rightStageOne.setPower(0);
-            robot.leftStageOne.setPower(0);
-        }
-        if (phaseUp2 < 0.5&& phaseUp2!=0) {
-            robot.leftStageOne.setPower(-.5);
-            robot.rightStageOne.setPower(-.5);
-        }
-        else if (phaseUp2 > 0.5) {
-            robot.leftStageOne.setPower(-1);
-            robot.rightStageOne.setPower(-1);
-        }
-        else {
-            robot.rightStageOne.setPower(0);
-            robot.leftStageOne.setPower(0);
-        }
 
-        if (gamepad2.dpad_up){
+        if (gamepad2.dpad_up||gamepad1.dpad_up){
             robot.ramp.setPower(1);
         }
-        else if(gamepad2.dpad_down){
+        else if(gamepad2.dpad_down||gamepad1.dpad_up){
             robot.ramp.setPower(-1);
         }
         else{
@@ -350,9 +286,16 @@ public class MainbotTeleopTank_Iterative_Sean extends OpMode{
             robot.rightStageTwo.setPosition(.7);
         }
         if (gamepad2.a){
-            robot.leftStageTwo.setPosition(0.2);
-            robot.rightStageTwo.setPosition(.9);
+            robot.leftStageTwo.setPosition(0.12);
+            robot.rightStageTwo.setPosition(.98);
         }
+        if (gamepad2.b){
+            robot.colorDrop.setPosition(.35);
+        }
+
+
+
+
 
 
         /*
@@ -406,11 +349,7 @@ public class MainbotTeleopTank_Iterative_Sean extends OpMode{
     //    telemetry.addData("right", "%.2f", Left);
         //    telemetry.addData("sideright",  "%.2f", sideRight);
         //  telemetry.addData("left", "%.2f", sideLeft);
-        Color.RGBToHSV((int) (robot.sensorColor.red() * SCALE_FACTOR),
-                (int) (robot.sensorColor.green() * SCALE_FACTOR),
-                (int) (robot.sensorColor.blue() * SCALE_FACTOR),
-                hsvValues);
-
+/*
         //distance = robot.sensorDistance.getDistance(DistanceUnit.CM);
         // send the info back to driver station using telemetry function.
         telemetry.addData("Distance (cm)",
@@ -419,7 +358,8 @@ public class MainbotTeleopTank_Iterative_Sean extends OpMode{
         telemetry.addData("Red  ", robot.sensorColor.red());
         telemetry.addData("Green", robot.sensorColor.green());
         telemetry.addData("Blue ", robot.sensorColor.blue());
-        telemetry.addData("Righty ", Righty);
+        */
+        telemetry.addData("phaseUp ", phaseUp);
         telemetry.addData("sideRight ", sideRight);
       //  telemetry.addData("right bumper: ", robot.rightBumper.getPosition());
    //     telemetry.addData("left bumper: ", robot.leftBumper.getPosition());

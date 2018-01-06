@@ -126,9 +126,9 @@ public class HardwareMatthewbot
         leftStageOne.setPower(0);
         rightStageOne.setPower(0);
         ramp.setPower(0);
-        leftStageTwo.setPosition(.25);
-        rightStageTwo.setPosition(.75);
-        colorDrop.setPosition(.45);
+        rightStageTwo.setPosition(.99);
+        leftStageTwo.setPosition(.12);
+        colorDrop.setPosition(0.1);
        // relicMotor.setPower(0);
         //relicServo.setPosition(0);
         //relicDropperServo.setPosition(53/255);

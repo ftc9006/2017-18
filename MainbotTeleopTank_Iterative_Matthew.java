@@ -80,6 +80,7 @@ public class MainbotTeleopTank_Iterative_Matthew extends OpMode{
          */
         robot.init(hardwareMap);
      //   robot.leftBumper.setPosition(.5);
+        robot.colorDrop.setPosition(0.35);
         robot.rightStageTwo.setPosition(.99);
         robot.leftStageTwo.setPosition(.12);
       //  robot.rightBumper.setPosition(.7);
@@ -108,7 +109,7 @@ public class MainbotTeleopTank_Iterative_Matthew extends OpMode{
     @Override
     public void loop() {
 //        double left;
-
+        robot.colorDrop.setPosition(0.35);
 
         double Righty, Lefty, sideRight, sideLeft;
         boolean straffeL,straffeR;
@@ -117,8 +118,8 @@ public class MainbotTeleopTank_Iterative_Matthew extends OpMode{
         // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
         Lefty = gamepad1.left_stick_y;
         Righty = gamepad1.right_stick_y;
-        sideRight= gamepad1.right_stick_x;
-        sideLeft=gamepad1.left_stick_x;
+        sideRight = gamepad1.right_stick_x;
+        sideLeft = gamepad1.left_stick_x;
         phaseUp = gamepad1.right_trigger;
         phaseDown = gamepad1.left_trigger;
         straffeL = gamepad1.right_bumper;
@@ -154,6 +155,14 @@ public class MainbotTeleopTank_Iterative_Matthew extends OpMode{
             robot.leftRearDrive.setPower(sideLeft*-1);
             robot.rightRearDrive.setPower(sideLeft*-1);
         }
+        else if(sideLeft<0.5&&sideLeft>-0.5)
+        {
+            robot.leftFrontDrive.setPower(sideLeft*.5);
+            robot.rightFrontDrive.setPower(sideLeft*-.5);
+            robot.leftRearDrive.setPower(sideLeft*-.5);
+            robot.rightRearDrive.setPower(sideLeft*.5);
+
+        }
         else if(sideLeft!=0)
         {
             robot.leftFrontDrive.setPower(sideLeft);
@@ -162,6 +171,13 @@ public class MainbotTeleopTank_Iterative_Matthew extends OpMode{
             robot.rightRearDrive.setPower(sideLeft);
 
         }
+        else if(Righty<0&&Righty>-.5&&sideRight<0&&sideRight>-.5)
+        {
+            robot.leftFrontDrive.setPower(-.25);
+            robot.rightFrontDrive.setPower(-.45);
+            robot.leftRearDrive.setPower(-.25);
+            robot.rightRearDrive.setPower(-.45);
+        }
         else if(Righty<0&&sideRight<0)
         {
             robot.leftFrontDrive.setPower(-.5);
@@ -169,11 +185,24 @@ public class MainbotTeleopTank_Iterative_Matthew extends OpMode{
             robot.leftRearDrive.setPower(-.5);
             robot.rightRearDrive.setPower(-.9);
         }
+        else if(Righty<0&&Righty>-.5&&sideRight>0&&sideRight<.5) {
+            robot.leftFrontDrive.setPower(-.45);
+            robot.rightFrontDrive.setPower(-.25);
+            robot.leftRearDrive.setPower(-.45);
+            robot.rightRearDrive.setPower(-.25);
+        }
         else if(Righty<0&&sideRight>0) {
             robot.leftFrontDrive.setPower(-.9);
             robot.rightFrontDrive.setPower(-.5);
             robot.leftRearDrive.setPower(-.9);
             robot.rightRearDrive.setPower(-.5);
+        }
+        else if(Righty>0&&Righty<.5&&sideRight<0&&sideRight>-.5)
+        {
+            robot.leftFrontDrive.setPower(.45);
+            robot.rightFrontDrive.setPower(.25);
+            robot.leftRearDrive.setPower(.45);
+            robot.rightRearDrive.setPower(.25);
         }
         else if(Righty>0&&sideRight<0)
         {
@@ -182,11 +211,24 @@ public class MainbotTeleopTank_Iterative_Matthew extends OpMode{
             robot.leftRearDrive.setPower(.9);
             robot.rightRearDrive.setPower(.5);
         }
+        else if(Righty>0&&Righty<.5&&sideRight>0&&sideRight<.5) {
+            robot.leftFrontDrive.setPower(.5);
+            robot.rightFrontDrive.setPower(.9);
+            robot.leftRearDrive.setPower(.5);
+            robot.rightRearDrive.setPower(.9);
+        }
         else if(Righty>0&&sideRight>0) {
             robot.leftFrontDrive.setPower(.5);
             robot.rightFrontDrive.setPower(.9);
             robot.leftRearDrive.setPower(.5);
             robot.rightRearDrive.setPower(.9);
+        }
+        else if(Righty==0&&((sideRight>0&&sideRight<.5)||(sideRight<0&&sideRight>-.5)))
+        {
+            robot.leftFrontDrive.setPower(sideRight*-.5);
+            robot.rightFrontDrive.setPower(sideRight*.5);
+            robot.leftRearDrive.setPower(sideRight*-.5);
+            robot.rightRearDrive.setPower(sideRight*.5);
         }
         else if(Righty==0&&sideRight!=0)
         {
@@ -194,6 +236,14 @@ public class MainbotTeleopTank_Iterative_Matthew extends OpMode{
             robot.rightFrontDrive.setPower(sideRight);
             robot.leftRearDrive.setPower(sideRight*-1);
             robot.rightRearDrive.setPower(sideRight);
+        }
+        else if(Righty<0&&Righty>-.5&&sideRight==0)
+        {
+            robot.leftFrontDrive.setPower(Righty*.5);
+            robot.rightFrontDrive.setPower(Righty*.5);
+            robot.leftRearDrive.setPower(Righty*.5);
+            robot.rightRearDrive.setPower(Righty*.5);
+
         }
         else if(Righty<0&&sideRight==0)
         {
@@ -203,6 +253,14 @@ public class MainbotTeleopTank_Iterative_Matthew extends OpMode{
             robot.rightRearDrive.setPower(Righty);
 
         }
+        else if(Righty>0&&Righty<.5)
+        {
+            robot.leftFrontDrive.setPower(Righty*.5);
+            robot.rightFrontDrive.setPower(Righty*.5);
+            robot.leftRearDrive.setPower(Righty*.5);
+            robot.rightRearDrive.setPower(Righty*.5);
+
+        }
         else if(Righty>0)
         {
             robot.leftFrontDrive.setPower(Righty);
@@ -210,6 +268,13 @@ public class MainbotTeleopTank_Iterative_Matthew extends OpMode{
             robot.leftRearDrive.setPower(Righty);
             robot.rightRearDrive.setPower(Righty);
 
+        }
+        else if(sideLeft==0&&((Lefty>0&&Lefty<.5)||(Lefty<0&&Lefty>-.5)))
+        {
+            robot.leftFrontDrive.setPower(sideRight*-.5);
+            robot.rightFrontDrive.setPower(sideRight*.5);
+            robot.leftRearDrive.setPower(sideRight*-.5);
+            robot.rightRearDrive.setPower(sideRight*.5);
         }
         else if(Lefty!=0&&sideLeft==0)
         {
@@ -247,19 +312,15 @@ public class MainbotTeleopTank_Iterative_Matthew extends OpMode{
             robot.leftStageOne.setPower(.5);
             robot.rightStageOne.setPower(.5);
         }
-        else if (phaseDown > 0.5) {
+        else if (phaseDown >= 0.5) {
             robot.leftStageOne.setPower(1);
             robot.rightStageOne.setPower(1);
         }
-        else {
-            robot.rightStageOne.setPower(0);
-            robot.leftStageOne.setPower(0);
-        }
-        if (phaseUp < 0.5&& phaseUp!=0) {
+        else if (phaseUp < 0.5&& phaseUp!=0) {
             robot.leftStageOne.setPower(-.5);
             robot.rightStageOne.setPower(-.5);
         }
-        else if (phaseUp > 0.5) {
+        else if (phaseUp >= 0.5) {
             robot.leftStageOne.setPower(-1);
             robot.rightStageOne.setPower(-1);
         }
@@ -290,80 +351,20 @@ public class MainbotTeleopTank_Iterative_Matthew extends OpMode{
             robot.leftStageTwo.setPosition(0.12);
             robot.rightStageTwo.setPosition(.99);
         }
-
-        if (phaseDown != 0) {
-            robot.leftStageOne.setPower(1);
-            robot.rightStageOne.setPower(1);
-        } else {
-            robot.rightStageOne.setPower(0);
-            robot.leftStageOne.setPower(0);
-        }
-        if (phaseUp != 0) {
-            robot.leftStageOne.setPower(-1);
-            robot.rightStageOne.setPower(-1);
-        } else {
-            robot.leftStageOne.setPower(0);
-            robot.rightStageOne.setPower(0);
+        if (gamepad1.b){
+            robot.colorDrop.setPosition(.35);
         }
 
 
-        /*
-        if (gamepad1.right_bumper == true){
-        //    robot.leftBumper.setPosition(robot.leftBumper.getPosition()+.05);
-            sleep(2000);
-        }
-        else if (gamepad1.left_bumper == true){
-          ///  robot.leftBumper.setPosition(robot.leftBumper.getPosition()-.05);
 
-        }
-        else{
-            ///robot.leftBumper.setPosition(robot.leftBumper.getPosition());
-        }
-        */
-        /*
 
-         */
-   //     if (gamepad2.dpad_down){
-     //       robot.relicServo.setPosition(robot.relicServo.getPosition()+.025);
-       // }
-        //else if(gamepad2.dpad_up){
-         //   robot.relicServo.setPosition(robot.relicServo.getPosition()-.025);
-       // }
-       // else{
-        //    robot.relicServo.setPosition(robot.relicServo.getPosition());
-        //}
-
-//        if (gamepad2.dpad_left){
- //           robot.relicDropperServo.setPosition(robot.relicDropperServo.getPosition()+.025);
-  //      }
-    //    else if (gamepad2.dpad_right){
-     //       robot.relicDropperServo.setPosition(robot.relicDropperServo.getPosition()-.025);
-      //  }
-       // else {
-        //    robot.relicDropperServo.setPosition(robot.relicDropperServo.getPosition());
-        //}
-   //     if (gamepad2.left_trigger>5){
- //           robot.relicMotor.setPower(.5);
-     //   }
-        //else if (gamepad2.left_bumper){
-       //     robot.relicMotor.setPower(-.5);
-        //}
-        //else{
-        //    robot.relicMotor.setPower(0);
-       // }
-
-        // Send telemetry message to signify robot running;
-        //  telemetry.addData("claw",  "Offset = %.2f", clawOffset);
-  //      telemetry.addData("sideright",  "%.2f", sideRight);
-    //    telemetry.addData("right", "%.2f", Left);
-        //    telemetry.addData("sideright",  "%.2f", sideRight);
-        //  telemetry.addData("left", "%.2f", sideLeft);
+/*
         Color.RGBToHSV((int) (robot.sensorColor.red() * SCALE_FACTOR),
                 (int) (robot.sensorColor.green() * SCALE_FACTOR),
                 (int) (robot.sensorColor.blue() * SCALE_FACTOR),
                 hsvValues);
 
-        //distance = robot.sensorDistance.getDistance(DistanceUnit.CM);
+
         // send the info back to driver station using telemetry function.
         telemetry.addData("Distance (cm)",
                 String.format(Locale.US, "%.02f", robot.sensorDistance.getDistance(DistanceUnit.CM)));
@@ -371,10 +372,9 @@ public class MainbotTeleopTank_Iterative_Matthew extends OpMode{
         telemetry.addData("Red  ", robot.sensorColor.red());
         telemetry.addData("Green", robot.sensorColor.green());
         telemetry.addData("Blue ", robot.sensorColor.blue());
+        */
         telemetry.addData("TriggerR ", phaseUp);
         telemetry.addData("TriggerL ", phaseDown);
-      //  telemetry.addData("right bumper: ", robot.rightBumper.getPosition());
-   //     telemetry.addData("left bumper: ", robot.leftBumper.getPosition());
         telemetry.update();
     }
 
