@@ -150,11 +150,11 @@ public class PushbotBlueAuto extends LinearOpMode {
                  * on which VuMark was visible. */
                  telemetry.addData("VuMark", "%s visible", vuMark);
                  if (vuMark == RelicRecoveryVuMark.RIGHT) {
-                     robot.leftDrive.setPower(-.5);
-                     robot.rightDrive.setPower(-.5);
+       //              robot.leftDrive.setPower(-.5);
+         //            robot.rightDrive.setPower(-.5);
                      sleep(500);
-                     robot.leftDrive.setPower(0);
-                     robot.rightDrive.setPower(0);
+           //          robot.leftDrive.setPower(0);
+             //        robot.rightDrive.setPower(0);
                      telemetry.addData("I ", "see right!");
                  }
                 /* For fun, we also exhibit the navigational pose. In the Relic Recovery game,

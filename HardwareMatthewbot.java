@@ -29,6 +29,7 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -66,6 +67,7 @@ public class HardwareMatthewbot
     public DcMotor  rightStageOne   = null;//Cube Collection Mechanism
     public DcMotor  relicMotor = null;// Scissor Jack
     public Servo    leftBumper = null;
+    public Servo    align = null;
     public Servo    rightBumper = null;
     public Servo    relicServo = null;
     public Servo    relicDropperServo = null;
@@ -73,8 +75,11 @@ public class HardwareMatthewbot
     public Servo    rightStageTwo = null;
     public CRServo    ramp = null;
     public Servo    colorDrop = null;
+    public BNO055IMU imu=null;
     ColorSensor sensorColor;
     DistanceSensor sensorDistance;
+    ColorSensor sensorColor2;
+    DistanceSensor sensorDistance2;
 
     /* local OpMode members. */
     HardwareMap hwMap           =  null;
@@ -90,6 +95,10 @@ public class HardwareMatthewbot
         // Save reference to Hardware map
         hwMap = ahwMap;
 
+
+        imu = hwMap.get(BNO055IMU.class, "imu");
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        imu.initialize(parameters);
         // Define and Initialize Motors
         leftFrontDrive  = hwMap.get(DcMotor.class, "lfd");
         rightFrontDrive = hwMap.get(DcMotor.class, "rfd");
@@ -102,10 +111,13 @@ public class HardwareMatthewbot
         //relicMotor = hwMap.get(DcMotor.class, "rmotor");
         sensorColor = hwMap.get(ColorSensor.class, "sensor1");
         sensorDistance = hwMap.get(DistanceSensor.class, "sensor1");
+        sensorColor2 = hwMap.get(ColorSensor.class, "sensor2");
+        sensorDistance2 = hwMap.get(DistanceSensor.class, "sensor2");
     //   relicServo = hwMap.get(Servo.class, "rservo");
   //     relicDropperServo = hwMap.get(Servo.class, "rdservo");
         leftStageTwo = hwMap.get(Servo.class, "lp2");
         rightStageTwo = hwMap.get(Servo.class, "rp2");
+        align = hwMap.get(Servo.class, "al");
         colorDrop = hwMap.get(Servo.class, "cd");
         ramp = hwMap.get(CRServo.class, "r");
 
@@ -126,9 +138,10 @@ public class HardwareMatthewbot
         leftStageOne.setPower(0);
         rightStageOne.setPower(0);
         ramp.setPower(0);
-        rightStageTwo.setPosition(.99);
-        leftStageTwo.setPosition(.12);
-        colorDrop.setPosition(0.1);
+        leftStageTwo.setPosition(1);
+        rightStageTwo.setPosition(0.1);
+        colorDrop.setPosition(0.35);
+        align.setPosition(.8);
        // relicMotor.setPower(0);
         //relicServo.setPosition(0);
         //relicDropperServo.setPosition(53/255);

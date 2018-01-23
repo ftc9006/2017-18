@@ -185,7 +185,7 @@ public class MainbotAutoBlueRight extends LinearOpMode {
 
             if(y==0) {
                 robot.ramp.setPower(1);
-                sleep(1500);
+                sleep(2000);
                 robot.ramp.setPower(0);
                 y=1;
             }
@@ -255,7 +255,7 @@ public class MainbotAutoBlueRight extends LinearOpMode {
 
 
                 robot.colorDrop.setPosition(1);
-                sleep(500);
+                sleep(1000);
 
                 Color.RGBToHSV((int) (robot.sensorColor.red() * SCALE_FACTOR),
                         (int) (robot.sensorColor.green() * SCALE_FACTOR),
@@ -288,14 +288,14 @@ public class MainbotAutoBlueRight extends LinearOpMode {
                     robot.rightRearDrive.setPower(0);
                     robot.colorDrop.setPosition(0.1);
 
-                    sleep(360);
+                    sleep(1000);
 
                     robot.leftFrontDrive.setPower(-.45);
                     robot.rightFrontDrive.setPower(-.45);
                     robot.leftRearDrive.setPower(-.45);
                     robot.rightRearDrive.setPower(-.45);
 
-                    sleep(200);
+                    sleep(350);
 
                     robot.leftFrontDrive.setPower(0);
                     robot.rightFrontDrive.setPower(0);
@@ -318,7 +318,7 @@ public class MainbotAutoBlueRight extends LinearOpMode {
                     robot.rightRearDrive.setPower(0);
                     robot.colorDrop.setPosition(0.1);
 
-                    sleep(360);
+                    sleep(1000);
 
                     robot.leftFrontDrive.setPower(.45);
                     robot.rightFrontDrive.setPower(.45);
@@ -387,8 +387,10 @@ public class MainbotAutoBlueRight extends LinearOpMode {
                     robot.leftRearDrive.setPower(0);
                     robot.rightRearDrive.setPower(0);
 
-                    robot.leftStageTwo.setPosition(1);
-                    robot.rightStageTwo.setPosition(0);
+                    sleep(200);
+
+                    robot.leftStageTwo.setPosition(0.12);
+                    robot.rightStageTwo.setPosition(.98);
                     telemetry.addData("Path", "Complete");
                     telemetry.update();
                     position=0;
@@ -459,8 +461,10 @@ public class MainbotAutoBlueRight extends LinearOpMode {
                     robot.leftRearDrive.setPower(0);
                     robot.rightRearDrive.setPower(0);
 
-                    robot.leftStageTwo.setPosition(1);
-                    robot.rightStageTwo.setPosition(0);
+                    sleep(200);
+
+                    robot.leftStageTwo.setPosition(0.12);
+                    robot.rightStageTwo.setPosition(.98);
                     telemetry.addData("Path", "Complete");
                     telemetry.update();
                     position=0;
@@ -531,8 +535,10 @@ public class MainbotAutoBlueRight extends LinearOpMode {
                     robot.leftRearDrive.setPower(0);
                     robot.rightRearDrive.setPower(0);
 
-                    robot.leftStageTwo.setPosition(1);
-                    robot.rightStageTwo.setPosition(0);
+                    sleep(200);
+
+                    robot.leftStageTwo.setPosition(0.12);
+                    robot.rightStageTwo.setPosition(.98);
                     telemetry.addData("Path", "Complete");
                     telemetry.update();
                     position=0;

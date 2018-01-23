@@ -58,16 +58,11 @@ public class HardwarePushbot2
     public DcMotor  leftDrive   = null;
     public DcMotor  rightDrive  = null;
 
+    public DcMotor  leftWheel   = null;
+    //public DcMotor  rightWheel  = null;
     public DcMotor  leftArm     = null;
-    public DcMotor  clawMotor   = null;
-    public Servo    leftClaw    = null;
-    public Servo    rightClaw   = null;
+    public Servo    align = null;
 
-    DigitalChannel digitalTouch;  // Hardware Device Object
-
-    public static final double MID_SERVO       =  0.5 ;
-    public static final double ARM_UP_POWER    =  0.45 ;
-    public static final double ARM_DOWN_POWER  = -0.45 ;
 
     /* local OpMode members. */
     HardwareMap hwMap           =  null;
@@ -84,36 +79,44 @@ public class HardwarePushbot2
         hwMap = ahwMap;
 
         // Define and Initialize Motors
-        leftDrive  = hwMap.get(DcMotor.class, "ldrive");
-        rightDrive = hwMap.get(DcMotor.class, "rdrive");
-     //   leftDrive = hwMap.get(DcMotor.class, "lrdrive");
-     //   rightDrive = hwMap.get(DcMotor.class, "rrdrive");
-        leftArm    = hwMap.get(DcMotor.class, "left_arm");
+        leftDrive  = hwMap.get(DcMotor.class, "l");
+        rightDrive = hwMap.get(DcMotor.class, "r");
+
+        leftWheel  = hwMap.get(DcMotor.class, "lw");
+       // rightWheel = hwMap.get(DcMotor.class, "rwheel");
+        leftArm    = hwMap.get(DcMotor.class, "la");
+
+        align = hwMap.get(Servo.class, "al");
        // clawMotor = hwMap.get(DcMotor.class, "claw_motor");
         leftDrive.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
         rightDrive.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
-        digitalTouch = hwMap.get(DigitalChannel.class, "touch");
+
+
+        leftWheel.setDirection(DcMotor.Direction.FORWARD);
+    //    rightWheel.setDirection(DcMotor.Direction.REVERSE);
+
 
         // Set all motors to zero power
         leftDrive.setPower(0);
         rightDrive.setPower(0);
 
+        align.setPosition(.3);
 
-        leftArm.setPower(0);
+        leftWheel.setPower(0);
+//        leftArm.setPower(0);
       //  clawMotor.setPower(0);        // Set all motors to run without encoders.
         // May want to use RUN_USING_ENCODERS if encoders are installed.
 
         leftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        digitalTouch.setMode(DigitalChannel.Mode.INPUT);
 
-        leftArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-      //  clawMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        // Define and initialize ALL installed servos.
-        leftClaw  = hwMap.get(Servo.class, "left_hand");
-        rightClaw = hwMap.get(Servo.class, "right_hand");
-        leftClaw.setPosition(MID_SERVO);
-        rightClaw.setPosition(MID_SERVO);
+
+        leftWheel.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+  //      rightWheel.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftArm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+
     }
  }
 

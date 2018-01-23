@@ -30,13 +30,21 @@ package org.firstinspires.ftc.teamcode;
 
 import android.graphics.Color;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.robotcore.external.Func;
+import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.robotcore.external.navigation.Position;
+import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 import java.util.Locale;
-
 /**
  * This file provides basic Telop driving for a Pushbot robot.
  * The code is structured as an Iterative OpMode
@@ -52,14 +60,20 @@ import java.util.Locale;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Mainbot: Teleop Tank 2P", group="Pushbot")
+@TeleOp(name="Mainbot: Teleop Testing", group="Pushbot")
 //@Disabled
-public class MainbotTeleopTank_Iterative_Sean extends OpMode{
+public class MainbotTeleopTesting extends OpMode{
 
     /* Declare OpMode members. */
     HardwareMatthewbot robot       = new HardwareMatthewbot(); // use the class created to define a Pushbot's hardware
     // could also use HardwarePushbotMatrix class.
-    int x = 0;
+
+    Orientation angles;
+    BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+
+
+
+
     // hsvValues is an array that will hold the hue, saturation, and value information.
     float hsvValues[] = {0F, 0F, 0F};
 
@@ -69,6 +83,19 @@ public class MainbotTeleopTank_Iterative_Sean extends OpMode{
     // sometimes it helps to multiply the raw RGB values with a scale factor
     // to amplify/attentuate the measured values.
     final double SCALE_FACTOR = 255;
+
+
+    float x=0,y=0,z=0,startZ=0;
+    double Righty, Lefty, sideRight, sideLeft,distance=0;
+    double phaseUp;
+    double phaseDown;
+    boolean straffeL,straffeR,straffeL2,straffeR2;
+    double turnR,turnL;
+    double Righty2, Lefty2, sideRight2, sideLeft2;
+    double phaseUp2;
+    double phaseDown2;
+
+
     /*
      * Code to run ONCE when the driver hits INIT
      */
@@ -79,11 +106,11 @@ public class MainbotTeleopTank_Iterative_Sean extends OpMode{
          */
         robot.init(hardwareMap);
      //   robot.leftBumper.setPosition(.5);
-        robot.leftStageTwo.setPosition(1);
-        robot.rightStageTwo.setPosition(0.1);
+        robot.rightStageTwo.setPosition(.5);
+        robot.leftStageTwo.setPosition(.5);
         robot.colorDrop.setPosition(0.35);
-        robot.align.setPosition(0.8);
-
+        //robot.imu.startAccelerationIntegration(new Position(),new Velocity(),1000);
+        robot.imu.startAccelerationIntegration(new Position() ,new Velocity(),500);
       //  robot.rightBumper.setPosition(.7);
 
         // Send telemetry message to signify robot waiting;
@@ -112,20 +139,11 @@ public class MainbotTeleopTank_Iterative_Sean extends OpMode{
 //        double left;
         robot.colorDrop.setPosition(0.35);
 
-        double Righty, Lefty, sideRight, sideLeft;
-        double phaseUp;
-        double phaseDown;
-        boolean straffeL,straffeR,straffeL2,straffeR2;
-        double turnR,turnL;
-        double Righty2, Lefty2, sideRight2, sideLeft2;
-        double phaseUp2;
-        double phaseDown2;
-
         // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
-        Lefty = gamepad1.right_stick_y;
-        Righty = gamepad1.left_stick_y;
-        sideRight= gamepad1.left_stick_x;
-        sideLeft=gamepad1.right_stick_x;
+        Lefty = gamepad1.left_stick_y;
+        Righty = gamepad1.right_stick_y;
+        sideRight= gamepad1.right_stick_x;
+        sideLeft=gamepad1.left_stick_x;
         phaseUp = gamepad2.right_trigger;
         phaseDown = gamepad2.left_trigger;
         straffeL = gamepad1.right_bumper;
@@ -135,13 +153,12 @@ public class MainbotTeleopTank_Iterative_Sean extends OpMode{
         //turnL = gamepad1.left_trigger;
         //turnR= gamepad1.left_trigger;
 
-        Lefty2 = gamepad1.right_stick_y;
-        Righty2 = gamepad1.left_stick_y;
-        sideRight2= gamepad1.left_stick_x;
-        sideLeft2=gamepad1.right_stick_x;
+        Lefty2 = gamepad1.left_stick_y;
+        Righty2 = gamepad1.right_stick_y;
+        sideRight2= gamepad1.right_stick_x;
+        sideLeft2=gamepad1.left_stick_x;
         //phaseUp2 = gamepad1.right_trigger;
         //phaseDown2 = gamepad1.left_trigger;
-
 
 
 
@@ -250,36 +267,88 @@ public class MainbotTeleopTank_Iterative_Sean extends OpMode{
             robot.leftStageOne.setPower(0);
         }
 
-/*
-        if (gamepad1.y){
-            robot.leftStageTwo.setPosition(1);
-            robot.rightStageTwo.setPosition(0.1);
+        angles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+
+//startZ   20
+        z = AngleUnit.DEGREES.normalize(angles.firstAngle);
+        if (gamepad1.y) {
+           do {
+               angles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+
+
+               z = AngleUnit.DEGREES.normalize(angles.firstAngle);
+               if(z<0)
+                   z=360+z;
+
+
+
+
+                   robot.leftFrontDrive.setPower(-.25);
+                   robot.rightFrontDrive.setPower(.25);
+                   robot.leftRearDrive.setPower(-.25);
+                   robot.rightRearDrive.setPower(.25);
+
+               if(startZ-z<0&&z>180) {
+                   z=z-360;
+               }
+
+           }while(startZ-z>95||startZ-z<85);
+            robot.leftFrontDrive.setPower(0);
+            robot.rightFrontDrive.setPower(0);
+            robot.leftRearDrive.setPower(0);
+            robot.rightRearDrive.setPower(0);
         }
-        if(gamepad1.x)
+        if(gamepad1.a)
         {
-            robot.leftStageTwo.setPosition(.4);
-            robot.rightStageTwo.setPosition(.7);
+            angles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+
+
+            startZ = AngleUnit.DEGREES.normalize(angles.firstAngle);//goes 0 to 180 and 0 to -179
+            if(startZ<0) {
+                startZ = 360 + startZ;
+
+            }
+
         }
-        if (gamepad1.a){
-            robot.leftStageTwo.setPosition(0.12);
-            robot.rightStageTwo.setPosition(.98);
-        }
-        */
-    if(gamepad1.a) {
-        robot.align.setPosition(.35);
-    }
-    if(gamepad1.x)
-    {
-        robot.align.setPosition(.8);
-    }
-        if (gamepad1.b){
-            robot.colorDrop.setPosition(.35);
+
+        if(gamepad1.b)
+        {
+            robot.imu.startAccelerationIntegration(new Position(),new Velocity(),500);
         }
 
 
 
 
-        if (gamepad2.a){
+
+        Color.RGBToHSV((int) (robot.sensorColor2.red() * SCALE_FACTOR),
+                (int) (robot.sensorColor2.green() * SCALE_FACTOR),
+                (int) (robot.sensorColor2.blue() * SCALE_FACTOR),
+                hsvValues);
+
+        distance = robot.sensorDistance2.getDistance(DistanceUnit.CM);
+        // send the info back to driver station using telemetry function.
+        telemetry.addData("Distance (cm)",
+                String.format(Locale.US, "%.02f", robot.sensorDistance2.getDistance(DistanceUnit.CM)));
+        telemetry.addData("x: ", robot.imu.getPosition().x);
+        telemetry.addData("y: ", robot.imu.getPosition().y);
+        telemetry.addData("z: ",robot.imu.getPosition().z);
+
+
+
+        telemetry.addData("z: ", z);
+        telemetry.addData("startZ: ", startZ);
+
+
+        if (gamepad2.dpad_up||gamepad1.dpad_up){
+            robot.ramp.setPower(1);
+        }
+        else if(gamepad2.dpad_down||gamepad1.dpad_up){
+            robot.ramp.setPower(-1);
+        }
+        else{
+            robot.ramp.setPower(0);
+        }
+        if (gamepad2.y){
             robot.leftStageTwo.setPosition(1);
             robot.rightStageTwo.setPosition(0.1);
         }
@@ -288,7 +357,7 @@ public class MainbotTeleopTank_Iterative_Sean extends OpMode{
             robot.leftStageTwo.setPosition(.4);
             robot.rightStageTwo.setPosition(.7);
         }
-        if (gamepad2.y){//lift up
+        if (gamepad2.a){
             robot.leftStageTwo.setPosition(0.12);
             robot.rightStageTwo.setPosition(.98);
         }
@@ -362,8 +431,7 @@ public class MainbotTeleopTank_Iterative_Sean extends OpMode{
         telemetry.addData("Green", robot.sensorColor.green());
         telemetry.addData("Blue ", robot.sensorColor.blue());
         */
-        telemetry.addData("phaseUp ", phaseUp);
-        telemetry.addData("sideRight ", sideRight);
+
       //  telemetry.addData("right bumper: ", robot.rightBumper.getPosition());
    //     telemetry.addData("left bumper: ", robot.leftBumper.getPosition());
         telemetry.update();

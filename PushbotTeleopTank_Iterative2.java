@@ -34,6 +34,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.util.Range;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
 
@@ -53,7 +54,7 @@ import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
  */
 
 @TeleOp(name="Pushbot: Teleop Tank", group="Pushbot")
-@Disabled
+//@Disabled
 public class PushbotTeleopTank_Iterative2 extends OpMode{
 
     /* Declare OpMode members. */
@@ -62,8 +63,6 @@ public class PushbotTeleopTank_Iterative2 extends OpMode{
 
 
                                                            // could also use HardwarePushbotMatrix class.
-    double          clawOffset  = 0.0 ;                  // Servo mid position
-    final double    CLAW_SPEED  = 0.02 ;                 // sets rate to move servo
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -98,45 +97,137 @@ public class PushbotTeleopTank_Iterative2 extends OpMode{
      */
     @Override
     public void loop() {
-        double left;
-        double right;
-        boolean touch;
-
+        double left,right,speed=0;
+        int target=0;
 
 
         // set the digital channel to input.
 
         // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
         left = -gamepad1.left_stick_y;
-        right = -gamepad1.right_stick_y;
+        right = gamepad1.right_stick_y;
 
+        if(left==1||left==-1)
         robot.leftDrive.setPower(left);
+        else if(left>0&&left<1)
+            robot.leftDrive.setPower(.2);
+        else if(left<0&&left>-1)
+            robot.leftDrive.setPower(-.2);
+        else
+            robot.leftDrive.setPower(0);
+
+
+        if(right==1||right==-1)
+            robot.rightDrive.setPower(right);
+        else if(right>0&&right<1)
+            robot.rightDrive.setPower(.2);
+        else if(right<0&&right>-1)
+            robot.rightDrive.setPower(-.2);
+        else
+            robot.rightDrive.setPower(0);
+
+
         robot.rightDrive.setPower(right);
 
-        // Use gamepad left & right Bumpers to open and close the claw
-        if (gamepad1.right_bumper)
-            clawOffset += CLAW_SPEED;
-        else if (gamepad1.left_bumper)
-            clawOffset -= CLAW_SPEED;
 
-        // Move both servos to new position.  Assume servos are mirror image of each other.
-        clawOffset = Range.clip(clawOffset, -0.5, 0.5);
-        robot.leftClaw.setPosition(robot.MID_SERVO + clawOffset);
-        robot.rightClaw.setPosition(robot.MID_SERVO - clawOffset);
+
+
+        /*
+
+        if (gamepad1.x)
+    target = 1000;
+  else if (gamepad1.x)
+    target = 0;
+
+  // how close are we to final position?
+  if (Math.abs(target - rightFlipMotor.getTargetPosition()) < 100)
+    speed = 0.1;
+  else
+    speed = 0.8;
+
+ rightFlipMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);  // Can't hurt to call this repeatedly
+ rightFlipMotor.setPower(speed);
+
+
+
+
+         */
+        /*
+        if (gamepad1.left_bumper == true)
+        {
+
+            target = 240;
+            robot.leftArm.setTargetPosition(target);
+            telemetry.addData("Flipper", robot.leftArm.getCurrentPosition());
+            telemetry.update();
+            if (Math.abs(target - robot.leftArm.getTargetPosition()) < 100)
+                speed = 0.1;
+            else
+                speed = 0.8;
+
+            robot.leftArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.leftArm.setPower(speed);
+        }
+        else if (gamepad1.right_bumper == true) {
+            target = 0;
+            robot.leftArm.setTargetPosition(target);
+            telemetry.addData("Flipper", robot.leftArm.getCurrentPosition());
+            telemetry.update();
+            if (Math.abs(target - robot.leftArm.getTargetPosition()) < 100)
+                speed = -0.1;
+            else
+                speed = -0.8;
+
+            robot.leftArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.leftArm.setPower(speed);
+        }
+        else
+        {
+            robot.leftArm.setPower(0);
+        }
+        */
+        if (gamepad1.left_bumper == true)
+        {
+            robot.leftArm.setPower(-.5);
+        }
+        else if (gamepad1.right_bumper == true) {
+
+            robot.leftArm.setPower(.5);
+        }
+        else
+        {
+            robot.leftArm.setPower(0);
+        }
+
+
+
+
+        if (gamepad1.left_trigger>0) {
+            robot.leftWheel.setPower(-1.0);
+        //    robot.rightWheel.setPower(-1.0);
+        }
+        else if (gamepad1.right_trigger>0) {
+            robot.leftWheel.setPower(1.0);
+          //  robot.rightWheel.setPower(1.0);
+        }
+
+
+        if(gamepad1.b)
+            robot.leftWheel.setPower(0);
+            //robot.rightWheel.setPower(0);
+
+
+
+        if(gamepad1.a)
+            robot.align.setPosition(.3);
+        if(gamepad1.y)
+            robot.align.setPosition(.7);
 
         // Use gamepad buttons to move the arm up (Y) and down (A)
-        if (gamepad1.dpad_up)
-            robot.leftArm.setPower(robot.ARM_UP_POWER);
-        else if (gamepad1.dpad_down && robot.digitalTouch.getState() == true)
-            robot.leftArm.setPower(robot.ARM_DOWN_POWER);
-        else
-            robot.leftArm.setPower(0.0);
-
-        // Send telemetry message to signify robot running;
-        touch=robot.digitalTouch.getState();
-        telemetry.addData("touch", touch);
         telemetry.addData("left",  "%.2f", left);
         telemetry.addData("right", "%.2f", right);
+        telemetry.addData("Flipper", robot.leftArm.getCurrentPosition());
+        telemetry.update();
         telemetry.update();
     }
 

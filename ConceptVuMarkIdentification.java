@@ -96,19 +96,19 @@ public class ConceptVuMarkIdentification extends LinearOpMode {
 
         robot.init(hardwareMap);
 
-        robot.leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+       // robot.leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+       // robot.rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        robot.leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+       // robot.leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+       // robot.rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        telemetry.addData("Path0",  "Starting at %7d :%7d",
-                robot.leftDrive.getCurrentPosition(),
-                robot.rightDrive.getCurrentPosition());
+        //telemetry.addData("Path0",  "Starting at %7d :%7d",
+         //       robot.leftDrive.getCurrentPosition(),
+           //     robot.rightDrive.getCurrentPosition());
         telemetry.update();
 
-        robot.leftClaw.setPosition(0.7);            // S4: Stop and close the claw.
-        robot.rightClaw.setPosition(0.3);
+       // robot.leftClaw.setPosition(0.7);            // S4: Stop and close the claw.
+       // robot.rightClaw.setPosition(0.3);
 
 
         /*
@@ -203,12 +203,12 @@ public class ConceptVuMarkIdentification extends LinearOpMode {
                         encoderDrive(TURN_SPEED,   -15, 15, 1.0);  // S2: Turn Left 8 Inches with 4 Sec timeout
                         encoderDrive(DRIVE_SPEED, 2, 2, 0.5);  // S3: Reverse 2 Inches with .5 Sec timeout
 
-                        robot.leftClaw.setPosition(0.0);            // S4: Stop and close the claw.
-                        robot.rightClaw.setPosition(1.0);
+                      //  robot.leftClaw.setPosition(0.0);            // S4: Stop and close the claw.
+                      //  robot.rightClaw.setPosition(1.0);
                         sleep(1000);     // pause for servos to move
                         //encoderDrive(DRIVE_SPEED, -1, -1, 0.5);
-                        robot.leftClaw.setPosition(0.5);            // S4: Stop and close the claw.
-                        robot.rightClaw.setPosition(0.5);
+                     //   robot.leftClaw.setPosition(0.5);            // S4: Stop and close the claw.
+                     //   robot.rightClaw.setPosition(0.5);
                         telemetry.addData("Path", "Complete");
                         telemetry.update();
                     } x++;
@@ -221,12 +221,12 @@ public class ConceptVuMarkIdentification extends LinearOpMode {
                         encoderDrive(TURN_SPEED,   -2, 2, .35);
                         encoderDrive(DRIVE_SPEED, 2, 2, 0.5);  // S3: Reverse 2 Inches with .5 Sec timeout
 
-                        robot.leftClaw.setPosition(0.0);            // S4: Stop and close the claw.
-                        robot.rightClaw.setPosition(1.0);
+                      //  robot.leftClaw.setPosition(0.0);            // S4: Stop and close the claw.
+                     //   robot.rightClaw.setPosition(1.0);
                         sleep(1000);     // pause for servos to move
                         //encoderDrive(DRIVE_SPEED, -1, -1, 0.5);
-                        robot.leftClaw.setPosition(0.5);            // S4: Stop and close the claw.
-                        robot.rightClaw.setPosition(0.5);
+                    //    robot.leftClaw.setPosition(0.5);            // S4: Stop and close the claw.
+                    //    robot.rightClaw.setPosition(0.5);
                         telemetry.addData("Path", "Complete");
                         telemetry.update();
                     } x++;
@@ -237,12 +237,12 @@ public class ConceptVuMarkIdentification extends LinearOpMode {
                         encoderDrive(TURN_SPEED,   -8, 8, 1.0);  // S2: Turn Left 12 Inches with 4 Sec timeout
                         encoderDrive(DRIVE_SPEED, 2, 2, 0.5);  // S3: Reverse 2 Inches with .5 Sec timeout
 
-                        robot.leftClaw.setPosition(0.0);            // S4: Stop and close the claw.
-                        robot.rightClaw.setPosition(1.0);
+                  //      robot.leftClaw.setPosition(0.0);            // S4: Stop and close the claw.
+                   //     robot.rightClaw.setPosition(1.0);
                         sleep(1000);     // pause for servos to move
                         //encoderDrive(DRIVE_SPEED, -1, -1, 0.5);
-                        robot.leftClaw.setPosition(0.5);            // S4: Stop and close the claw.
-                        robot.rightClaw.setPosition(0.5);
+                     //   robot.leftClaw.setPosition(0.5);            // S4: Stop and close the claw.
+                      //  robot.rightClaw.setPosition(0.5);
                         telemetry.addData("Path", "Complete");
                         telemetry.update();
                     } x++;
@@ -270,19 +270,19 @@ public class ConceptVuMarkIdentification extends LinearOpMode {
         if (opModeIsActive()) {
 
             // Determine new target position, and pass to motor controller
-            newLeftTarget = robot.leftDrive.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
-            newRightTarget = robot.rightDrive.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
-            robot.leftDrive.setTargetPosition(newLeftTarget);
-            robot.rightDrive.setTargetPosition(newRightTarget);
+  //          newLeftTarget = robot.leftDrive.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
+    //        newRightTarget = robot.rightDrive.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
+      //      robot.leftDrive.setTargetPosition(newLeftTarget);
+        //    robot.rightDrive.setTargetPosition(newRightTarget);
 
             // Turn On RUN_TO_POSITION
-            robot.leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            robot.rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+          //  robot.leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+          //  robot.rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
             // reset the timeout time and start motion.
             runtime.reset();
-            robot.leftDrive.setPower(Math.abs(speed));
-            robot.rightDrive.setPower(Math.abs(speed));
+            //robot.leftDrive.setPower(Math.abs(speed));
+            //robot.rightDrive.setPower(Math.abs(speed));
 
             // keep looping while we are still active, and there is time left, and both motors are running.
             // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
@@ -290,7 +290,7 @@ public class ConceptVuMarkIdentification extends LinearOpMode {
             // always end the motion as soon as possible.
             // However, if you require that BOTH motors have finished their moves before the robot continues
             // onto the next step, use (isBusy() || isBusy()) in the loop test.
-            while (opModeIsActive() &&
+/*            while (opModeIsActive() &&
                     (runtime.seconds() < timeoutS) &&
                     (robot.leftDrive.isBusy() && robot.rightDrive.isBusy())) {
 
@@ -311,6 +311,7 @@ public class ConceptVuMarkIdentification extends LinearOpMode {
             robot.rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
             //  sleep(250);   // optional pause after each move
-        }
+        }*/
     }
+}
 }
