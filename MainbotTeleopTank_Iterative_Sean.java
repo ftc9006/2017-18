@@ -82,7 +82,7 @@ public class MainbotTeleopTank_Iterative_Sean extends OpMode{
         robot.leftStageTwo.setPosition(1);
         robot.rightStageTwo.setPosition(0.1);
         robot.colorDrop.setPosition(0.35);
-        robot.align.setPosition(0.8);
+        robot.align.setPosition(0.95);
 
       //  robot.rightBumper.setPosition(.7);
 
@@ -266,11 +266,11 @@ public class MainbotTeleopTank_Iterative_Sean extends OpMode{
         }
         */
     if(gamepad1.a) {
-        robot.align.setPosition(.35);
+        robot.align.setPosition(.57);
     }
     if(gamepad1.x)
     {
-        robot.align.setPosition(.8);
+        robot.align.setPosition(0.95);
     }
         if (gamepad1.b){
             robot.colorDrop.setPosition(.35);

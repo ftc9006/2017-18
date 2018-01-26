@@ -116,10 +116,9 @@ public class PushbotTeleopTank_Iterative2 extends OpMode{
         else
             robot.leftDrive.setPower(0);
 
-
         if(right==1||right==-1)
-            robot.rightDrive.setPower(right);
-        else if(right>0&&right<1)
+            robot.rightDrive.setPower(-right);
+        else if(left>0&&left<1)
             robot.rightDrive.setPower(.2);
         else if(right<0&&right>-1)
             robot.rightDrive.setPower(-.2);
@@ -189,10 +188,14 @@ public class PushbotTeleopTank_Iterative2 extends OpMode{
         if (gamepad1.left_bumper == true)
         {
             robot.leftArm.setPower(-.5);
+            if (robot.digitalTouch.getState() == false)
+                robot.leftArm.setPower(0);
         }
         else if (gamepad1.right_bumper == true) {
 
             robot.leftArm.setPower(.5);
+            if (robot.digitalTouch2.getState() == false)
+                robot.leftArm.setPower(0);
         }
         else
         {

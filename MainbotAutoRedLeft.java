@@ -50,7 +50,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefau
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 import java.util.Locale;
-
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 /**
  * This OpMode does the following:
  * Scans the cipher
@@ -67,8 +67,8 @@ import java.util.Locale;
  *
  */
 
-@Autonomous(name="Mainbot: Red Auto Left", group ="Concept")
-//@Disabled
+@Autonomous(name="Mainbot: Red Auto Left14", group ="Concept")
+@Disabled
 public class MainbotAutoRedLeft extends LinearOpMode {
 
     public static final String TAG = "Vuforia VuMark Sample";

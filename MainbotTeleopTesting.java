@@ -316,7 +316,10 @@ public class MainbotTeleopTesting extends OpMode{
             robot.imu.startAccelerationIntegration(new Position(),new Velocity(),500);
         }
 
-
+if(gamepad1.x)
+{
+    robot.imu.stopAccelerationIntegration();
+}
 
 
 
@@ -329,9 +332,9 @@ public class MainbotTeleopTesting extends OpMode{
         // send the info back to driver station using telemetry function.
         telemetry.addData("Distance (cm)",
                 String.format(Locale.US, "%.02f", robot.sensorDistance2.getDistance(DistanceUnit.CM)));
-        telemetry.addData("x: ", robot.imu.getPosition().x);
-        telemetry.addData("y: ", robot.imu.getPosition().y);
-        telemetry.addData("z: ",robot.imu.getPosition().z);
+        telemetry.addData("x: ", robot.imu.getVelocity().xVeloc);
+        telemetry.addData("y: ", robot.imu.getVelocity().yVeloc);
+        telemetry.addData("z: ",robot.imu.getVelocity().zVeloc);
 
 
 

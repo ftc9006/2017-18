@@ -62,7 +62,8 @@ public class HardwarePushbot2
     //public DcMotor  rightWheel  = null;
     public DcMotor  leftArm     = null;
     public Servo    align = null;
-
+    DigitalChannel digitalTouch;  // Hardware Device Object
+    DigitalChannel digitalTouch2;  // Hardware Device Object
 
     /* local OpMode members. */
     HardwareMap hwMap           =  null;
@@ -109,6 +110,18 @@ public class HardwarePushbot2
 
         leftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+
+
+            // get a reference to our digitalTouch object.
+            digitalTouch = hwMap.get(DigitalChannel.class, "sensor_digital");
+
+            // set the digital channel to input.
+            digitalTouch.setMode(DigitalChannel.Mode.INPUT);
+        digitalTouch2 = hwMap.get(DigitalChannel.class, "sensor_digital");
+
+        // set the digital channel to input.
+        digitalTouch2.setMode(DigitalChannel.Mode.INPUT);
 
 
         leftWheel.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);

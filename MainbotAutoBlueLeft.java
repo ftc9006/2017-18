@@ -50,7 +50,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefau
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 import java.util.Locale;
-
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 /**
  * This OpMode does the following:
  * Scans the cipher
@@ -67,8 +67,8 @@ import java.util.Locale;
  *
  */
 
-@Autonomous(name="Mainbot: Blue Auto Left", group ="Concept")
-//@Disabled
+@Autonomous(name="Mainbot: Blue Auto Left1", group ="Concept")
+@Disabled
 public class MainbotAutoBlueLeft extends LinearOpMode {
 
     public static final String TAG = "Vuforia VuMark Sample";
@@ -270,10 +270,10 @@ public class MainbotAutoBlueLeft extends LinearOpMode {
                 if(robot.sensorColor.red()>robot.sensorColor.blue())
                 {
                     //forward toward red
-                    robot.leftFrontDrive.setPower(.45);
-                    robot.rightFrontDrive.setPower(.45);
-                    robot.leftRearDrive.setPower(.45);
-                    robot.rightRearDrive.setPower(.45);
+                    robot.leftFrontDrive.setPower(-.45);
+                    robot.rightFrontDrive.setPower(-.45);
+                    robot.leftRearDrive.setPower(-.45);
+                    robot.rightRearDrive.setPower(-.45);
 
                     sleep(200);
 
@@ -285,10 +285,10 @@ public class MainbotAutoBlueLeft extends LinearOpMode {
 
                     sleep(1000);
 
-                    robot.leftFrontDrive.setPower(-.45);
-                    robot.rightFrontDrive.setPower(-.45);
-                    robot.leftRearDrive.setPower(-.45);
-                    robot.rightRearDrive.setPower(-.45);
+                    robot.leftFrontDrive.setPower(.45);
+                    robot.rightFrontDrive.setPower(.45);
+                    robot.leftRearDrive.setPower(.45);
+                    robot.rightRearDrive.setPower(.45);
 
                     sleep(350);
 

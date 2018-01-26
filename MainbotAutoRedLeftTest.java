@@ -30,14 +30,11 @@ package org.firstinspires.ftc.teamcode;
 
 import android.graphics.Color;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.ColorSensor;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcontroller.external.samples.ConceptVuforiaNavigation;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
@@ -52,7 +49,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import java.util.Locale;
 
@@ -72,11 +68,14 @@ import java.util.Locale;
  *
  */
 
-@Autonomous(name="Mainbot: Blue Auto Right1", group ="Concept")
-@Disabled
-public class MainbotAutoBlueRight extends LinearOpMode {
+@Autonomous(name="Mainbot: Red Auto Left", group ="Concept")
+//@Disabled
+public class MainbotAutoRedLeftTest extends LinearOpMode {
 
     public static final String TAG = "Vuforia VuMark Sample";
+
+    Orientation angles;
+    BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
 
     OpenGLMatrix lastLocation = null;
     HardwareMatthewbot robot       = new HardwareMatthewbot();
@@ -90,8 +89,12 @@ public class MainbotAutoBlueRight extends LinearOpMode {
     static final double     DRIVE_SPEED             = 0.6;
     static final double     TURN_SPEED              = 0.5;
     static int x = 0,y=0;
+    static float z=0,startZ=0,checkZ=0;
     static int position=0;
     static double distance=0;
+    double tX , tY , tZ;
+    int color =0;//1 red, 2 blue
+
 
 
     /**
@@ -105,6 +108,12 @@ public class MainbotAutoBlueRight extends LinearOpMode {
         robot.init(hardwareMap);
         //robot.leftStageTwo.setPosition(.35);robot.rightStageTwo.setPosition(.75);
 
+        angles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+
+//startZ   20
+         startZ = AngleUnit.DEGREES.normalize(angles.firstAngle);
+        if(startZ<0)
+            startZ+=360;
 
 
 //        robot.rightRearDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -211,6 +220,8 @@ public class MainbotAutoBlueRight extends LinearOpMode {
                 OpenGLMatrix pose = ((VuforiaTrackableDefaultListener)relicTemplate.getListener()).getPose();
                 telemetry.addData("Pose", format(pose));
 
+
+
                 /* We further illustrate how to decompose the pose into useful rotational and
                  * translational components */
                 if (pose != null) {
@@ -218,15 +229,16 @@ public class MainbotAutoBlueRight extends LinearOpMode {
                     Orientation rot = Orientation.getOrientation(pose, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
 
                     // Extract the X, Y, and Z components of the offset of the target relative to the robot
-                    double tX = trans.get(0);
-                    double tY = trans.get(1);
-                    double tZ = trans.get(2);
+                     tX = trans.get(0);
+                     tY = trans.get(1);
+                     tZ = trans.get(2);
 
                     // Extract the rotational components of the target relative to the robot
                     double rX = rot.firstAngle;
                     double rY = rot.secondAngle;
                     double rZ = rot.thirdAngle;
                 }
+
                 if (vuMark == RelicRecoveryVuMark.RIGHT) {
                    position=1;
                     vuMark = RelicRecoveryVuMark.UNKNOWN;
@@ -248,7 +260,6 @@ public class MainbotAutoBlueRight extends LinearOpMode {
                  */
 
 
-
                 /**
                  *   Drop color sensor  knock off jewel
                  *   write code to lower sensor
@@ -256,7 +267,7 @@ public class MainbotAutoBlueRight extends LinearOpMode {
 
 
                 robot.colorDrop.setPosition(1);
-                sleep(1000);
+                sleep(2000);
 
                 Color.RGBToHSV((int) (robot.sensorColor.red() * SCALE_FACTOR),
                         (int) (robot.sensorColor.green() * SCALE_FACTOR),
@@ -267,71 +278,71 @@ public class MainbotAutoBlueRight extends LinearOpMode {
                 // send the info back to driver station using telemetry function.
                 telemetry.addData("Distance (cm)",
                         String.format(Locale.US, "%.02f", robot.sensorDistance.getDistance(DistanceUnit.CM)));
-                telemetry.addData("Alpha", robot.sensorColor.alpha());
-                telemetry.addData("Red  ", robot.sensorColor.red());
-                telemetry.addData("Green", robot.sensorColor.green());
-                telemetry.addData("Blue ", robot.sensorColor.blue());
-                telemetry.addData("Hue", hsvValues[0]);
+             //   telemetry.addData("Alpha", robot.sensorColor.alpha());
+             //   telemetry.addData("Red  ", robot.sensorColor.red());
+             //   telemetry.addData("Green", robot.sensorColor.green());
+             //   telemetry.addData("Blue ", robot.sensorColor.blue());
+             //   telemetry.addData("Hue", hsvValues[0]);
+
 
                 if(robot.sensorColor.red()>robot.sensorColor.blue())
                 {
-                    //forward toward red
-                    robot.leftFrontDrive.setPower(.45);
-                    robot.rightFrontDrive.setPower(.45);
-                    robot.leftRearDrive.setPower(.45);
-                    robot.rightRearDrive.setPower(.45);
+                        color=1;
+                        robot.leftFrontDrive.setPower(-.25);
+                        robot.rightFrontDrive.setPower(-.25);
+                        robot.leftRearDrive.setPower(-.25);
+                        robot.rightRearDrive.setPower(-.25);
 
-                    sleep(200);
+                       sleep(300);
 
                     robot.leftFrontDrive.setPower(0);
                     robot.rightFrontDrive.setPower(0);
                     robot.leftRearDrive.setPower(0);
                     robot.rightRearDrive.setPower(0);
+                   sleep(500);
                     robot.colorDrop.setPosition(0.1);
-
                     sleep(1000);
-
-                    robot.leftFrontDrive.setPower(-.45);
-                    robot.rightFrontDrive.setPower(-.45);
-                    robot.leftRearDrive.setPower(-.45);
-                    robot.rightRearDrive.setPower(-.45);
-
-                    sleep(350);
-
-                    robot.leftFrontDrive.setPower(0);
-                    robot.rightFrontDrive.setPower(0);
-                    robot.leftRearDrive.setPower(0);
-                    robot.rightRearDrive.setPower(0);
                 }
                 else
                 {
-                    //reverse toward red
-                    robot.leftFrontDrive.setPower(-.45);
-                    robot.rightFrontDrive.setPower(-.45);
-                    robot.leftRearDrive.setPower(-.45);
-                    robot.rightRearDrive.setPower(-.45);
 
-                    sleep(200);
+                    color=2;
+                    robot.leftFrontDrive.setPower(-.25);
+                    robot.rightFrontDrive.setPower(.25);
+                    robot.leftRearDrive.setPower(-.25);
+                    robot.rightRearDrive.setPower(.25);
 
+
+
+                   sleep(100);
                     robot.leftFrontDrive.setPower(0);
                     robot.rightFrontDrive.setPower(0);
                     robot.leftRearDrive.setPower(0);
                     robot.rightRearDrive.setPower(0);
                     robot.colorDrop.setPosition(0.1);
-
                     sleep(1000);
 
-                    robot.leftFrontDrive.setPower(.45);
-                    robot.rightFrontDrive.setPower(.45);
-                    robot.leftRearDrive.setPower(.45);
-                    robot.rightRearDrive.setPower(.45);
+                    robot.leftFrontDrive.setPower(.25);
+                    robot.rightFrontDrive.setPower(-.25);
+                    robot.leftRearDrive.setPower(.25);
+                    robot.rightRearDrive.setPower(-.25);
 
-                    sleep(200);
 
+
+                    sleep(100);
                     robot.leftFrontDrive.setPower(0);
                     robot.rightFrontDrive.setPower(0);
                     robot.leftRearDrive.setPower(0);
                     robot.rightRearDrive.setPower(0);
+                    sleep(500);
+
+
+
+
+
+
+
+
                 }
 
 
@@ -347,31 +358,52 @@ public class MainbotAutoBlueRight extends LinearOpMode {
 
 
 
+               ///telemetry.update();
                 /**
                  *   Place Glyph in correct column - redo all code based on mechanism built
                  *
                  */
                 if(position==1) {
                     x=1;
-                    robot.leftFrontDrive.setPower(.45);
-                    robot.rightFrontDrive.setPower(.45);
-                    robot.leftRearDrive.setPower(.45);
-                    robot.rightRearDrive.setPower(.45);
+                    robot.leftFrontDrive.setPower(-.45);
+                    robot.rightFrontDrive.setPower(-.45);
+                    robot.leftRearDrive.setPower(-.45);
+                    robot.rightRearDrive.setPower(-.45);
 
 
-                    sleep(1775);     // pause for servos to move
+                    if(color==2)
+                    {
+                        sleep(1050);
+                    }else
+                    sleep(1150);     // pause for servos to move
 
                     robot.leftFrontDrive.setPower(0);
                     robot.rightFrontDrive.setPower(0);
                     robot.leftRearDrive.setPower(0);
                     robot.rightRearDrive.setPower(0);
-
+                    telemetry.update();
                     sleep(500);
 
-                    robot.leftFrontDrive.setPower(.9);
-                    robot.rightFrontDrive.setPower(-.9);
-                    robot.leftRearDrive.setPower(.9);
-                    robot.rightRearDrive.setPower(-.9);
+                    do {
+                        angles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+                        z = AngleUnit.DEGREES.normalize(angles.firstAngle);
+                        if(z<0)
+                            z+=360;
+
+                        robot.leftFrontDrive.setPower(.25);
+                        robot.rightFrontDrive.setPower(-.25);
+                        robot.leftRearDrive.setPower(.25);
+                        robot.rightRearDrive.setPower(-.25);
+
+                        if(z-startZ<0&&startZ>180) {
+                            startZ-=360;
+                        }
+
+                    }while(z-startZ>95|z-startZ<85);
+                    robot.leftFrontDrive.setPower(0);
+                    robot.rightFrontDrive.setPower(0);
+                    robot.leftRearDrive.setPower(0);
+                    robot.rightRearDrive.setPower(0);
 
                     sleep(360);// turn left
 
@@ -379,7 +411,7 @@ public class MainbotAutoBlueRight extends LinearOpMode {
                     robot.rightFrontDrive.setPower(.9);
                     robot.leftRearDrive.setPower(.9);
                     robot.rightRearDrive.setPower(.9);
-
+                    telemetry.update();
 
                     sleep(275);     // pause for servos to move
 
@@ -396,7 +428,7 @@ public class MainbotAutoBlueRight extends LinearOpMode {
                     telemetry.update();
                     position=0;
 
-                    sleep(750);
+                    sleep(1000);
 
                     robot.leftFrontDrive.setPower(-.45);
                     robot.rightFrontDrive.setPower(-.45);
@@ -417,7 +449,7 @@ public class MainbotAutoBlueRight extends LinearOpMode {
                     robot.rightFrontDrive.setPower(.45);
                     robot.leftRearDrive.setPower(.45);
                     robot.rightRearDrive.setPower(.45);
-
+                    telemetry.update();
                     sleep(850);
 
                     robot.leftFrontDrive.setPower(0);
@@ -427,14 +459,17 @@ public class MainbotAutoBlueRight extends LinearOpMode {
                 }
                 if(position==2) {
                     x=1;
-                    robot.leftFrontDrive.setPower(.45);
-                    robot.rightFrontDrive.setPower(.45);
-                    robot.leftRearDrive.setPower(.45);
-                    robot.rightRearDrive.setPower(.45);
+                    robot.leftFrontDrive.setPower(-.45);
+                    robot.rightFrontDrive.setPower(-.45);
+                    robot.leftRearDrive.setPower(-.45);
+                    robot.rightRearDrive.setPower(-.45);
 
 
-                    sleep(1350);     // pause for servos to move
-
+                    if(color==2)
+                    {
+                        sleep(750);
+                    }else
+                        sleep(850);
                     robot.leftFrontDrive.setPower(0);
                     robot.rightFrontDrive.setPower(0);
                     robot.leftRearDrive.setPower(0);
@@ -442,10 +477,26 @@ public class MainbotAutoBlueRight extends LinearOpMode {
 
                     sleep(500);
 
-                    robot.leftFrontDrive.setPower(.9);
-                    robot.rightFrontDrive.setPower(-.9);
-                    robot.leftRearDrive.setPower(.9);
-                    robot.rightRearDrive.setPower(-.9);
+                    do {
+                        angles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+                        z = AngleUnit.DEGREES.normalize(angles.firstAngle);
+                        if(z<0)
+                            z+=360;
+
+                        robot.leftFrontDrive.setPower(.25);
+                        robot.rightFrontDrive.setPower(-.25);
+                        robot.leftRearDrive.setPower(.25);
+                        robot.rightRearDrive.setPower(-.25);
+
+                        if(z-startZ<0&&startZ>180) {
+                            startZ-=360;
+                        }
+
+                    }while(z-startZ>95|z-startZ<85);
+                    robot.leftFrontDrive.setPower(0);
+                    robot.rightFrontDrive.setPower(0);
+                    robot.leftRearDrive.setPower(0);
+                    robot.rightRearDrive.setPower(0);
 
                     sleep(360);// turn left
 
@@ -470,7 +521,7 @@ public class MainbotAutoBlueRight extends LinearOpMode {
                     telemetry.update();
                     position=0;
 
-                    sleep(750);
+                    sleep(1000);
 
                     robot.leftFrontDrive.setPower(-.45);
                     robot.rightFrontDrive.setPower(-.45);
@@ -507,7 +558,11 @@ public class MainbotAutoBlueRight extends LinearOpMode {
                     robot.rightRearDrive.setPower(.45);
 
 
-                    sleep(1000);     // pause for servos to move
+                    if(color==2)
+                    {
+                        sleep(600);
+                    }else
+                        sleep(700);      // pause for servos to move
 
                     robot.leftFrontDrive.setPower(0);
                     robot.rightFrontDrive.setPower(0);
@@ -516,10 +571,26 @@ public class MainbotAutoBlueRight extends LinearOpMode {
 
                     sleep(500);
 
-                    robot.leftFrontDrive.setPower(.9);
-                    robot.rightFrontDrive.setPower(-.9);
-                    robot.leftRearDrive.setPower(.9);
-                    robot.rightRearDrive.setPower(-.9);
+                    do {
+                        angles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+                        z = AngleUnit.DEGREES.normalize(angles.firstAngle);
+                        if(z<0)
+                            z+=360;
+
+                        robot.leftFrontDrive.setPower(.25);
+                        robot.rightFrontDrive.setPower(-.25);
+                        robot.leftRearDrive.setPower(.25);
+                        robot.rightRearDrive.setPower(-.25);
+
+                        if(z-startZ<0&&startZ>180) {
+                            startZ-=360;
+                        }
+
+                    }while(z-startZ>95|z-startZ<85);
+                    robot.leftFrontDrive.setPower(0);
+                    robot.rightFrontDrive.setPower(0);
+                    robot.leftRearDrive.setPower(0);
+                    robot.rightRearDrive.setPower(0);
 
                     sleep(360);// turn left
 
@@ -544,7 +615,7 @@ public class MainbotAutoBlueRight extends LinearOpMode {
                     telemetry.update();
                     position=0;
 
-                    sleep(750);
+                    sleep(1000);
 
                     robot.leftFrontDrive.setPower(-.45);
                     robot.rightFrontDrive.setPower(-.45);
