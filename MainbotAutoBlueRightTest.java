@@ -193,7 +193,7 @@ public class MainbotAutoBlueRightTest extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-
+/*
             if(y==0) {
                 robot.ramp.setPower(1);
                 sleep(2000);
@@ -201,7 +201,7 @@ public class MainbotAutoBlueRightTest extends LinearOpMode {
                 y=1;
             }
 
-
+*/
             /**
              *
              * Scan cipher to get LEFT CENTER or RIGHT
@@ -374,9 +374,9 @@ public class MainbotAutoBlueRightTest extends LinearOpMode {
 
                     if(color==2)
                     {
-                        sleep(1050);
+                        sleep(1500);
                     }else
-                    sleep(1150);     // pause for servos to move
+                    sleep(925);     // pause for servos to move
 
                     robot.leftFrontDrive.setPower(0);
                     robot.rightFrontDrive.setPower(0);
@@ -431,10 +431,10 @@ public class MainbotAutoBlueRightTest extends LinearOpMode {
 
                     sleep(1000);
 
-                    robot.leftFrontDrive.setPower(-.45);
-                    robot.rightFrontDrive.setPower(-.45);
-                    robot.leftRearDrive.setPower(-.45);
-                    robot.rightRearDrive.setPower(-.45);
+                    robot.leftFrontDrive.setPower(-.25);
+                    robot.rightFrontDrive.setPower(-.25);
+                    robot.leftRearDrive.setPower(-.25);
+                    robot.rightRearDrive.setPower(-.25);
 
 
                     sleep(500);
@@ -452,6 +452,20 @@ public class MainbotAutoBlueRightTest extends LinearOpMode {
                     robot.rightRearDrive.setPower(.45);
                     telemetry.update();
                     sleep(850);
+
+                    robot.leftFrontDrive.setPower(0);
+                    robot.rightFrontDrive.setPower(0);
+                    robot.leftRearDrive.setPower(0);
+                    robot.rightRearDrive.setPower(0);
+
+                    sleep (200);
+
+                    robot.leftFrontDrive.setPower(-.45);
+                    robot.rightFrontDrive.setPower(-.45);
+                    robot.leftRearDrive.setPower(-.45);
+                    robot.rightRearDrive.setPower(-.45);
+                    telemetry.update();
+                    sleep(100);
 
                     robot.leftFrontDrive.setPower(0);
                     robot.rightFrontDrive.setPower(0);
@@ -468,9 +482,9 @@ public class MainbotAutoBlueRightTest extends LinearOpMode {
 
                     if(color==2)
                     {
-                        sleep(750);
+                        sleep(1150);
                     }else
-                        sleep(850);
+                        sleep(625);
                     robot.leftFrontDrive.setPower(0);
                     robot.rightFrontDrive.setPower(0);
                     robot.leftRearDrive.setPower(0);
@@ -493,13 +507,13 @@ public class MainbotAutoBlueRightTest extends LinearOpMode {
                             startZ-=360;
                         }
 
-                    }while(z-startZ>95|z-startZ<85);
+                    }while(z-startZ>95|z-startZ<85);//turns left
                     robot.leftFrontDrive.setPower(0);
                     robot.rightFrontDrive.setPower(0);
                     robot.leftRearDrive.setPower(0);
                     robot.rightRearDrive.setPower(0);
 
-                    sleep(360);// turn left
+                    sleep(360);// rest
 
                     robot.leftFrontDrive.setPower(.9);
                     robot.rightFrontDrive.setPower(.9);
@@ -507,7 +521,7 @@ public class MainbotAutoBlueRightTest extends LinearOpMode {
                     robot.rightRearDrive.setPower(.9);
 
 
-                    sleep(275);     // pause for servos to move
+                    sleep(275);     // drive forward
 
                     robot.leftFrontDrive.setPower(0);
                     robot.rightFrontDrive.setPower(0);
@@ -522,15 +536,15 @@ public class MainbotAutoBlueRightTest extends LinearOpMode {
                     telemetry.update();
                     position=0;
 
-                    sleep(1000);
+                    sleep(1000); // shoot cube
 
-                    robot.leftFrontDrive.setPower(-.45);
-                    robot.rightFrontDrive.setPower(-.45);
-                    robot.leftRearDrive.setPower(-.45);
-                    robot.rightRearDrive.setPower(-.45);
+                    robot.leftFrontDrive.setPower(-.25);
+                    robot.rightFrontDrive.setPower(-.25);
+                    robot.leftRearDrive.setPower(-.25);
+                    robot.rightRearDrive.setPower(-.25);
 
 
-                    sleep(500);
+                    sleep(500); // back up to let cube fall
 
                     robot.leftFrontDrive.setPower(0);
                     robot.rightFrontDrive.setPower(0);
@@ -545,6 +559,20 @@ public class MainbotAutoBlueRightTest extends LinearOpMode {
                     robot.rightRearDrive.setPower(.45);
 
                     sleep(850);
+
+                    robot.leftFrontDrive.setPower(0);
+                    robot.rightFrontDrive.setPower(0);
+                    robot.leftRearDrive.setPower(0);
+                    robot.rightRearDrive.setPower(0);
+
+                    sleep (200);
+
+                    robot.leftFrontDrive.setPower(-.45);
+                    robot.rightFrontDrive.setPower(-.45);
+                    robot.leftRearDrive.setPower(-.45);
+                    robot.rightRearDrive.setPower(-.45);
+                    telemetry.update();
+                    sleep(100);// back away so not touching cube
 
                     robot.leftFrontDrive.setPower(0);
                     robot.rightFrontDrive.setPower(0);
@@ -561,9 +589,9 @@ public class MainbotAutoBlueRightTest extends LinearOpMode {
 
                     if(color==2)
                     {
-                        sleep(600);
+                        sleep(800);
                     }else
-                        sleep(700);      // pause for servos to move
+                        sleep(450);      // pause for servos to move
 
                     robot.leftFrontDrive.setPower(0);
                     robot.rightFrontDrive.setPower(0);
@@ -618,10 +646,10 @@ public class MainbotAutoBlueRightTest extends LinearOpMode {
 
                     sleep(1000);
 
-                    robot.leftFrontDrive.setPower(-.45);
-                    robot.rightFrontDrive.setPower(-.45);
-                    robot.leftRearDrive.setPower(-.45);
-                    robot.rightRearDrive.setPower(-.45);
+                    robot.leftFrontDrive.setPower(-.25);
+                    robot.rightFrontDrive.setPower(-.25);
+                    robot.leftRearDrive.setPower(-.25);
+                    robot.rightRearDrive.setPower(-.25);
 
 
                     sleep(500);
@@ -639,6 +667,20 @@ public class MainbotAutoBlueRightTest extends LinearOpMode {
                     robot.rightRearDrive.setPower(.45);
 
                     sleep(850);
+
+                    robot.leftFrontDrive.setPower(0);
+                    robot.rightFrontDrive.setPower(0);
+                    robot.leftRearDrive.setPower(0);
+                    robot.rightRearDrive.setPower(0);
+
+                    sleep (200);
+
+                    robot.leftFrontDrive.setPower(-.45);
+                    robot.rightFrontDrive.setPower(-.45);
+                    robot.leftRearDrive.setPower(-.45);
+                    robot.rightRearDrive.setPower(-.45);
+                    telemetry.update();
+                    sleep(100);
 
                     robot.leftFrontDrive.setPower(0);
                     robot.rightFrontDrive.setPower(0);

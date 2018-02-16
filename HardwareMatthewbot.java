@@ -131,6 +131,7 @@ public class HardwareMatthewbot
 //        leftStageOne.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
   //      rightStageOne.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         // Set all motors to zero power
+        // Omae wa mou shindeiru.
         leftFrontDrive.setPower(0);
         rightFrontDrive.setPower(0);
         leftRearDrive.setPower(0);

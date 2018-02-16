@@ -81,7 +81,7 @@ public class MainbotTeleopTank_Iterative_Sean extends OpMode{
      //   robot.leftBumper.setPosition(.5);
         robot.leftStageTwo.setPosition(1);
         robot.rightStageTwo.setPosition(0.1);
-        robot.colorDrop.setPosition(0.35);
+        robot.colorDrop.setPosition(0.45);
         robot.align.setPosition(0.95);
 
       //  robot.rightBumper.setPosition(.7);
@@ -110,7 +110,7 @@ public class MainbotTeleopTank_Iterative_Sean extends OpMode{
     @Override
     public void loop() {
 //        double left;
-        robot.colorDrop.setPosition(0.35);
+        robot.colorDrop.setPosition(0.45);
 
         double Righty, Lefty, sideRight, sideLeft;
         double phaseUp;

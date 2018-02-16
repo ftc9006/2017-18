@@ -191,7 +191,7 @@ public class MainbotAutoBlueLeftTest extends LinearOpMode {
         relicTrackables.activate();
 
         while (opModeIsActive()) {
-
+/*
 
             if(y==0) {
                 robot.ramp.setPower(1);
@@ -199,7 +199,7 @@ public class MainbotAutoBlueLeftTest extends LinearOpMode {
                 robot.ramp.setPower(0);
                 y=1;
             }
-
+*/
 
             /**
              *
@@ -365,17 +365,17 @@ public class MainbotAutoBlueLeftTest extends LinearOpMode {
                  */
                 if(position==1) {
                     x=1;
-                    robot.leftFrontDrive.setPower(-.45);
-                    robot.rightFrontDrive.setPower(-.45);
-                    robot.leftRearDrive.setPower(-.45);
-                    robot.rightRearDrive.setPower(-.45);
+                    robot.leftFrontDrive.setPower(.45);
+                    robot.rightFrontDrive.setPower(.45);
+                    robot.leftRearDrive.setPower(.45);
+                    robot.rightRearDrive.setPower(.45);
 
 
                     if(color==2)
                     {
-                        sleep(200);
+                        sleep(800);
                     }else
-                        sleep(500);     // pause for servos to move
+                        sleep(350);     // pause for servos to move
 
                     robot.leftFrontDrive.setPower(0);
                     robot.rightFrontDrive.setPower(0);
@@ -384,22 +384,6 @@ public class MainbotAutoBlueLeftTest extends LinearOpMode {
                     telemetry.update();
                     sleep(500);
 
-                    do {
-                        angles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-                        z = AngleUnit.DEGREES.normalize(angles.firstAngle);
-                        if(z<0)
-                            z+=360;
-
-                        robot.leftFrontDrive.setPower(.25);
-                        robot.rightFrontDrive.setPower(-.25);
-                        robot.leftRearDrive.setPower(.25);
-                        robot.rightRearDrive.setPower(-.25);
-/*
-                        if(z-startZ<0&&startZ>180) {
-                            startZ-=360;
-                        }
-*/
-                    }while(z-startZ<-2||z-startZ>2);
                     robot.leftFrontDrive.setPower(0);
                     robot.rightFrontDrive.setPower(0);
                     robot.leftRearDrive.setPower(0);
@@ -413,34 +397,22 @@ public class MainbotAutoBlueLeftTest extends LinearOpMode {
                     robot.rightRearDrive.setPower(-.45);
                     telemetry.update();
 
-                    sleep(600);     // Straffe Left
+                    if(color==2)
+                    sleep(1200);     // Straffe Right
+                    else
+                    sleep(1500);
 
                     robot.leftFrontDrive.setPower(0);
                     robot.rightFrontDrive.setPower(0);
                     robot.leftRearDrive.setPower(0);
                     robot.rightRearDrive.setPower(0);
-                    do {
-                        angles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-                        z = AngleUnit.DEGREES.normalize(angles.firstAngle);
-                        if(z<0)
-                            z+=360;
 
-                        robot.leftFrontDrive.setPower(-.25);
-                        robot.rightFrontDrive.setPower(.25);
-                        robot.leftRearDrive.setPower(-.25);
-                        robot.rightRearDrive.setPower(.25);
-/*
-                        if(z-startZ<0&&startZ>180) {
-                            startZ-=360;
-                        }
-*/
-                    }while(z-startZ<-2||z-startZ>2);
                     sleep(200);
 
-                    robot.leftFrontDrive.setPower(-.45);
-                    robot.rightFrontDrive.setPower(-.45);
-                    robot.leftRearDrive.setPower(-.45);
-                    robot.rightRearDrive.setPower(-.45);
+                    robot.leftFrontDrive.setPower(.45);
+                    robot.rightFrontDrive.setPower(.45);
+                    robot.leftRearDrive.setPower(.45);
+                    robot.rightRearDrive.setPower(.45);
 
                     sleep(300);
 
@@ -455,12 +427,12 @@ public class MainbotAutoBlueLeftTest extends LinearOpMode {
                     telemetry.update();
                     position=0;
 
-                    sleep(5000);
+                    sleep(1000);
 
-                    robot.leftFrontDrive.setPower(-.45);
-                    robot.rightFrontDrive.setPower(-.45);
-                    robot.leftRearDrive.setPower(-.45);
-                    robot.rightRearDrive.setPower(-.45);
+                    robot.leftFrontDrive.setPower(-.25);
+                    robot.rightFrontDrive.setPower(-.25);
+                    robot.leftRearDrive.setPower(-.25);
+                    robot.rightRearDrive.setPower(-.25);
 
 
                     sleep(500);
@@ -478,6 +450,20 @@ public class MainbotAutoBlueLeftTest extends LinearOpMode {
                     robot.rightRearDrive.setPower(.45);
                     telemetry.update();
                     sleep(850);
+
+                    robot.leftFrontDrive.setPower(0);
+                    robot.rightFrontDrive.setPower(0);
+                    robot.leftRearDrive.setPower(0);
+                    robot.rightRearDrive.setPower(0);
+
+                    sleep (200);
+
+                    robot.leftFrontDrive.setPower(-.45);
+                    robot.rightFrontDrive.setPower(-.45);
+                    robot.leftRearDrive.setPower(-.45);
+                    robot.rightRearDrive.setPower(-.45);
+                    telemetry.update();
+                    sleep(100);
 
                     robot.leftFrontDrive.setPower(0);
                     robot.rightFrontDrive.setPower(0);
@@ -494,9 +480,9 @@ public class MainbotAutoBlueLeftTest extends LinearOpMode {
 
                     if(color==2)
                     {
-                        sleep(200);
+                        sleep(850);
                     }else
-                        sleep(300);     // pause for servos to move
+                        sleep(350);     // pause for servos to move
 
                     robot.leftFrontDrive.setPower(0);
                     robot.rightFrontDrive.setPower(0);
@@ -518,7 +504,7 @@ public class MainbotAutoBlueLeftTest extends LinearOpMode {
                     robot.rightRearDrive.setPower(-.45);
                     telemetry.update();
 
-                    sleep(750);     // Straffe Left
+                    sleep(750);     // Straffe Right
 
                     robot.leftFrontDrive.setPower(0);
                     robot.rightFrontDrive.setPower(0);
@@ -545,133 +531,12 @@ public class MainbotAutoBlueLeftTest extends LinearOpMode {
                     telemetry.update();
                     position=0;
 
-                    sleep(5000);
+                    sleep(1000);
 
                     robot.leftFrontDrive.setPower(-.25);
                     robot.rightFrontDrive.setPower(-.25);
                     robot.leftRearDrive.setPower(-.25);
                     robot.rightRearDrive.setPower(-.25);
-
-
-                    sleep(100);
-
-                    robot.leftFrontDrive.setPower(0);
-                    robot.rightFrontDrive.setPower(0);
-                    robot.leftRearDrive.setPower(0);
-                    robot.rightRearDrive.setPower(0);
-
-                    sleep(300);
-
-                    robot.leftFrontDrive.setPower(.45);
-                    robot.rightFrontDrive.setPower(.45);
-                    robot.leftRearDrive.setPower(.45);
-                    robot.rightRearDrive.setPower(.45);
-                    telemetry.update();
-                    sleep(250);
-
-                    robot.leftFrontDrive.setPower(0);
-                    robot.rightFrontDrive.setPower(0);
-                    robot.leftRearDrive.setPower(0);
-                    robot.rightRearDrive.setPower(0);
-                }
-                if(position==3) {
-                    x=1;
-                    robot.leftFrontDrive.setPower(-.45);
-                    robot.rightFrontDrive.setPower(-.45);
-                    robot.leftRearDrive.setPower(-.45);
-                    robot.rightRearDrive.setPower(-.45);
-
-
-                    if(color==2)
-                    {
-                        sleep(200);
-                    }else
-                        sleep(500);     // pause for servos to move
-
-                    robot.leftFrontDrive.setPower(0);
-                    robot.rightFrontDrive.setPower(0);
-                    robot.leftRearDrive.setPower(0);
-                    robot.rightRearDrive.setPower(0);
-                    telemetry.update();
-                    sleep(500);
-
-                    do {
-                        angles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-                        z = AngleUnit.DEGREES.normalize(angles.firstAngle);
-                        if(z<0)
-                            z+=360;
-
-                        robot.leftFrontDrive.setPower(.25);
-                        robot.rightFrontDrive.setPower(-.25);
-                        robot.leftRearDrive.setPower(.25);
-                        robot.rightRearDrive.setPower(-.25);
-/*
-                        if(z-startZ<0&&startZ>180) {
-                            startZ-=360;
-                        }
-*/
-                    }while(z-startZ<-2||z-startZ>2);
-                    robot.leftFrontDrive.setPower(0);
-                    robot.rightFrontDrive.setPower(0);
-                    robot.leftRearDrive.setPower(0);
-                    robot.rightRearDrive.setPower(0);
-
-                    sleep(360);// turn left
-
-                    robot.leftFrontDrive.setPower(-.45);
-                    robot.rightFrontDrive.setPower(.45);
-                    robot.leftRearDrive.setPower(.45);
-                    robot.rightRearDrive.setPower(-.45);
-                    telemetry.update();
-
-                    sleep(600);     // Straffe Left
-
-                    robot.leftFrontDrive.setPower(0);
-                    robot.rightFrontDrive.setPower(0);
-                    robot.leftRearDrive.setPower(0);
-                    robot.rightRearDrive.setPower(0);
-                    do {
-                        angles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-                        z = AngleUnit.DEGREES.normalize(angles.firstAngle);
-                        if(z<0)
-                            z+=360;
-
-                        robot.leftFrontDrive.setPower(-.25);
-                        robot.rightFrontDrive.setPower(.25);
-                        robot.leftRearDrive.setPower(-.25);
-                        robot.rightRearDrive.setPower(.25);
-/*
-                        if(z-startZ<0&&startZ>180) {
-                            startZ-=360;
-                        }
-*/
-                    }while(z-startZ<-2||z-startZ>2);
-                    sleep(200);
-
-                    robot.leftFrontDrive.setPower(-.45);
-                    robot.rightFrontDrive.setPower(-.45);
-                    robot.leftRearDrive.setPower(-.45);
-                    robot.rightRearDrive.setPower(-.45);
-
-                    sleep(300);
-
-
-                    robot.leftFrontDrive.setPower(0);
-                    robot.rightFrontDrive.setPower(0);
-                    robot.leftRearDrive.setPower(0);
-                    robot.rightRearDrive.setPower(0);
-                    robot.leftStageTwo.setPosition(0.12);
-                    robot.rightStageTwo.setPosition(.98);
-                    telemetry.addData("Path", "Complete");
-                    telemetry.update();
-                    position=0;
-
-                    sleep(5000);
-
-                    robot.leftFrontDrive.setPower(-.45);
-                    robot.rightFrontDrive.setPower(-.45);
-                    robot.leftRearDrive.setPower(-.45);
-                    robot.rightRearDrive.setPower(-.45);
 
 
                     sleep(500);
@@ -689,6 +554,127 @@ public class MainbotAutoBlueLeftTest extends LinearOpMode {
                     robot.rightRearDrive.setPower(.45);
                     telemetry.update();
                     sleep(850);
+
+                    robot.leftFrontDrive.setPower(0);
+                    robot.rightFrontDrive.setPower(0);
+                    robot.leftRearDrive.setPower(0);
+                    robot.rightRearDrive.setPower(0);
+
+                    sleep (200);
+
+                    robot.leftFrontDrive.setPower(-.45);
+                    robot.rightFrontDrive.setPower(-.45);
+                    robot.leftRearDrive.setPower(-.45);
+                    robot.rightRearDrive.setPower(-.45);
+                    telemetry.update();
+                    sleep(100);
+
+                    robot.leftFrontDrive.setPower(0);
+                    robot.rightFrontDrive.setPower(0);
+                    robot.leftRearDrive.setPower(0);
+                    robot.rightRearDrive.setPower(0);
+                }
+                if(position==3) {
+                    x=1;
+                    robot.leftFrontDrive.setPower(.45);
+                    robot.rightFrontDrive.setPower(.45);
+                    robot.leftRearDrive.setPower(.45);
+                    robot.rightRearDrive.setPower(.45);
+
+
+                    if(color==2)
+                    {
+                        sleep(850);
+                    }else
+                        sleep(350);     // pause for servos to move
+
+                    robot.leftFrontDrive.setPower(0);
+                    robot.rightFrontDrive.setPower(0);
+                    robot.leftRearDrive.setPower(0);
+                    robot.rightRearDrive.setPower(0);
+                    telemetry.update();
+                    sleep(500);
+
+                    robot.leftFrontDrive.setPower(0);
+                    robot.rightFrontDrive.setPower(0);
+                    robot.leftRearDrive.setPower(0);
+                    robot.rightRearDrive.setPower(0);
+
+                    sleep(360);// turn left
+
+                    robot.leftFrontDrive.setPower(-.45);
+                    robot.rightFrontDrive.setPower(.45);
+                    robot.leftRearDrive.setPower(.45);
+                    robot.rightRearDrive.setPower(-.45);
+                    telemetry.update();
+
+                    if(color==2)
+                    sleep(400);     // Straffe Right
+                    else
+                    sleep(500);
+
+                    robot.leftFrontDrive.setPower(0);
+                    robot.rightFrontDrive.setPower(0);
+                    robot.leftRearDrive.setPower(0);
+                    robot.rightRearDrive.setPower(0);
+
+                    sleep(200);
+
+                    robot.leftFrontDrive.setPower(.45);
+                    robot.rightFrontDrive.setPower(.45);
+                    robot.leftRearDrive.setPower(.45);
+                    robot.rightRearDrive.setPower(.45);
+
+                    sleep(300);
+
+
+                    robot.leftFrontDrive.setPower(0);
+                    robot.rightFrontDrive.setPower(0);
+                    robot.leftRearDrive.setPower(0);
+                    robot.rightRearDrive.setPower(0);
+                    robot.leftStageTwo.setPosition(0.12);
+                    robot.rightStageTwo.setPosition(.98);
+                    telemetry.addData("Path", "Complete");
+                    telemetry.update();
+                    position=0;
+
+                    sleep(1000);
+
+                    robot.leftFrontDrive.setPower(-.25);
+                    robot.rightFrontDrive.setPower(-.25);
+                    robot.leftRearDrive.setPower(-.25);
+                    robot.rightRearDrive.setPower(-.25);
+
+
+                    sleep(500);
+
+                    robot.leftFrontDrive.setPower(0);
+                    robot.rightFrontDrive.setPower(0);
+                    robot.leftRearDrive.setPower(0);
+                    robot.rightRearDrive.setPower(0);
+
+                    sleep(300);
+
+                    robot.leftFrontDrive.setPower(.45);
+                    robot.rightFrontDrive.setPower(.45);
+                    robot.leftRearDrive.setPower(.45);
+                    robot.rightRearDrive.setPower(.45);
+                    telemetry.update();
+                    sleep(850);
+
+                    robot.leftFrontDrive.setPower(0);
+                    robot.rightFrontDrive.setPower(0);
+                    robot.leftRearDrive.setPower(0);
+                    robot.rightRearDrive.setPower(0);
+
+                    sleep (200);
+
+                    robot.leftFrontDrive.setPower(-.45);
+                    robot.rightFrontDrive.setPower(-.45);
+                    robot.leftRearDrive.setPower(-.45);
+                    robot.rightRearDrive.setPower(-.45);
+                    telemetry.update();
+                    sleep(100);
 
                     robot.leftFrontDrive.setPower(0);
                     robot.rightFrontDrive.setPower(0);
