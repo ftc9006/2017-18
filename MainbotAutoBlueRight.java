@@ -390,8 +390,8 @@ public class MainbotAutoBlueRight extends LinearOpMode {
 
                     sleep(200);
 
-                    robot.leftStageTwo.setPosition(0.12);
-                    robot.rightStageTwo.setPosition(.98);
+             //       robot.leftStageTwo.setPosition(0.12);
+             //       robot.rightStageTwo.setPosition(.98);
                     telemetry.addData("Path", "Complete");
                     telemetry.update();
                     position=0;
@@ -464,8 +464,8 @@ public class MainbotAutoBlueRight extends LinearOpMode {
 
                     sleep(200);
 
-                    robot.leftStageTwo.setPosition(0.12);
-                    robot.rightStageTwo.setPosition(.98);
+              //      robot.leftStageTwo.setPosition(0.12);
+                //    robot.rightStageTwo.setPosition(.98);
                     telemetry.addData("Path", "Complete");
                     telemetry.update();
                     position=0;
@@ -538,8 +538,8 @@ public class MainbotAutoBlueRight extends LinearOpMode {
 
                     sleep(200);
 
-                    robot.leftStageTwo.setPosition(0.12);
-                    robot.rightStageTwo.setPosition(.98);
+          //          robot.leftStageTwo.setPosition(0.12);
+            //        robot.rightStageTwo.setPosition(.98);
                     telemetry.addData("Path", "Complete");
                     telemetry.update();
                     position=0;

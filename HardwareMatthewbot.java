@@ -30,10 +30,12 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -58,7 +60,7 @@ import com.sun.tools.javac.tree.DCTree;
  */
 public class HardwareMatthewbot
 {
-    /* Public OpMode members. */
+    //   Motors
     public DcMotor  leftFrontDrive   = null;
     public DcMotor  rightFrontDrive  = null;
     public DcMotor  leftRearDrive  = null;
@@ -66,20 +68,30 @@ public class HardwareMatthewbot
     public DcMotor  leftStageOne   = null; //Cube Collection Mechanism
     public DcMotor  rightStageOne   = null;//Cube Collection Mechanism
     public DcMotor  relicMotor = null;// Scissor Jack
+    public DcMotor  stageTwo = null;
+    public DcMotor BadMeme = null; // meme
+
+
+
+
+    //Servos
     public Servo    leftBumper = null;
     public Servo    align = null;
     public Servo    rightBumper = null;
     public Servo    relicServo = null;
     public Servo    relicDropperServo = null;
-    public Servo    leftStageTwo = null;
-    public Servo    rightStageTwo = null;
-    public CRServo    ramp = null;
+    public CRServo  ramp = null;
     public Servo    colorDrop = null;
-    public BNO055IMU imu=null;
-    ColorSensor sensorColor;
-    DistanceSensor sensorDistance;
-    ColorSensor sensorColor2;
-    DistanceSensor sensorDistance2;
+
+    //Sensors
+    public BNO055IMU imu=null; //for gyro
+    ColorSensor sensorColor; // for rev color proximity sensor
+    DistanceSensor sensorDistance; // for rev color proximity sensor
+ //   ColorSensor sensorColor2;
+   // DistanceSensor sensorDistance2;
+    ModernRoboticsI2cRangeSensor rangeSensor1;// for ultrasonic sensor
+    ModernRoboticsI2cRangeSensor rangeSensor2;// for ultrasonic sensor
+    DigitalChannel digitalTouch; // touch sensor
 
     /* local OpMode members. */
     HardwareMap hwMap           =  null;
@@ -96,9 +108,7 @@ public class HardwareMatthewbot
         hwMap = ahwMap;
 
 
-        imu = hwMap.get(BNO055IMU.class, "imu");
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        imu.initialize(parameters);
+
         // Define and Initialize Motors
         leftFrontDrive  = hwMap.get(DcMotor.class, "lfd");
         rightFrontDrive = hwMap.get(DcMotor.class, "rfd");
@@ -106,54 +116,65 @@ public class HardwareMatthewbot
         rightRearDrive = hwMap.get(DcMotor.class, "rrd");
         leftStageOne = hwMap.get(DcMotor.class, "lp1");
         rightStageOne = hwMap.get(DcMotor.class, "rp1");
-      //  leftBumper = hwMap.get(Servo.class, "lb");
-       // rightBumper = hwMap.get(Servo.class, "rbumper");
-        //relicMotor = hwMap.get(DcMotor.class, "rmotor");
-        sensorColor = hwMap.get(ColorSensor.class, "sensor1");
-        sensorDistance = hwMap.get(DistanceSensor.class, "sensor1");
-        sensorColor2 = hwMap.get(ColorSensor.class, "sensor2");
-        sensorDistance2 = hwMap.get(DistanceSensor.class, "sensor2");
-    //   relicServo = hwMap.get(Servo.class, "rservo");
-  //     relicDropperServo = hwMap.get(Servo.class, "rdservo");
-        leftStageTwo = hwMap.get(Servo.class, "lp2");
-        rightStageTwo = hwMap.get(Servo.class, "rp2");
-        align = hwMap.get(Servo.class, "al");
-        colorDrop = hwMap.get(Servo.class, "cd");
-        ramp = hwMap.get(CRServo.class, "r");
+        stageTwo = hwMap.get(DcMotor.class,"s2");
+       // BadMeme = hwMap.get(DcMotor.class, "u gay");
 
+         // define and initialize servos
+        align = hwMap.get(Servo.class, "al");//2
+        colorDrop = hwMap.get(Servo.class, "cd");//3
+        ramp = hwMap.get(CRServo.class, "r");//0
+
+
+        //define and initialize sensors
+        sensorColor = hwMap.get(ColorSensor.class, "sensor1"); //these are for the jewel detector
+        sensorDistance = hwMap.get(DistanceSensor.class, "sensor1"); //these are for the jewel detector
+
+        imu = hwMap.get(BNO055IMU.class, "imu"); //these are for the gyro
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();//these are for the gyro
+        imu.initialize(parameters);//these are for the gyro
+
+        rangeSensor1 = hwMap.get(ModernRoboticsI2cRangeSensor.class, "US1");//these are for ultrasonic range sensors
+        rangeSensor2 = hwMap.get(ModernRoboticsI2cRangeSensor.class, "US2");//these are for ultrasonic range sensors
+
+        digitalTouch = hwMap.get(DigitalChannel.class, "touch");
+
+        // set the digital channel to input.
+        digitalTouch.setMode(DigitalChannel.Mode.INPUT);
+
+
+        //  set direction motors spin
         leftFrontDrive.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
         rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
         leftRearDrive.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
         rightRearDrive.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
         leftStageOne.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
         rightStageOne.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
+        stageTwo.setDirection(DcMotor.Direction.FORWARD);
 
-//        leftStageOne.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-  //      rightStageOne.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         // Set all motors to zero power
-        // Omae wa mou shindeiru.
         leftFrontDrive.setPower(0);
         rightFrontDrive.setPower(0);
         leftRearDrive.setPower(0);
         rightRearDrive.setPower(0);
         leftStageOne.setPower(0);
         rightStageOne.setPower(0);
-        ramp.setPower(0);
-        leftStageTwo.setPosition(1);
-        rightStageTwo.setPosition(0.1);
-        colorDrop.setPosition(0.35);
-        align.setPosition(.95);
-       // relicMotor.setPower(0);
-        //relicServo.setPosition(0);
-        //relicDropperServo.setPosition(53/255);
+        stageTwo.setPower(0);
 
+
+        colorDrop.setPosition(0.75); //put the jewel arm up
+        align.setPosition(.95); // put the glyph aligner in
+
+
+        //set motors to run without encoders
         leftFrontDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightFrontDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         leftRearDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightRearDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        //relicMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
         leftStageOne.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightStageOne.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        stageTwo.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
  }
 

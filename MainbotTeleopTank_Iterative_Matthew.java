@@ -81,8 +81,8 @@ public class MainbotTeleopTank_Iterative_Matthew extends OpMode{
         robot.init(hardwareMap);
      //   robot.leftBumper.setPosition(.5);
         robot.colorDrop.setPosition(0.35);
-        robot.rightStageTwo.setPosition(.99);
-        robot.leftStageTwo.setPosition(.12);
+      //  robot.rightStageTwo.setPosition(.99);
+        //robot.leftStageTwo.setPosition(.12);
       //  robot.rightBumper.setPosition(.7);
 
         // Send telemetry message to signify robot waiting;
@@ -339,17 +339,17 @@ public class MainbotTeleopTank_Iterative_Matthew extends OpMode{
             robot.ramp.setPower(0);
         }
         if (gamepad1.y){
-            robot.leftStageTwo.setPosition(1);
-            robot.rightStageTwo.setPosition(0.1);
+      //      robot.leftStageTwo.setPosition(1);
+        //    robot.rightStageTwo.setPosition(0.1);
         }
         if(gamepad1.x)
         {
-            robot.leftStageTwo.setPosition(.4);
-            robot.rightStageTwo.setPosition(.7);
+      //      robot.leftStageTwo.setPosition(.4);
+        //    robot.rightStageTwo.setPosition(.7);
         }
         if (gamepad1.a){
-            robot.leftStageTwo.setPosition(0.12);
-            robot.rightStageTwo.setPosition(.99);
+      //      robot.leftStageTwo.setPosition(0.12);
+        //    robot.rightStageTwo.setPosition(.99);
         }
         if (gamepad1.b){
             robot.colorDrop.setPosition(.35);

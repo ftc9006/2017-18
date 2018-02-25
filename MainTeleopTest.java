@@ -28,14 +28,10 @@
  */
 package org.firstinspires.ftc.teamcode;
 
-import android.graphics.Color;
-
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-
-import java.util.Locale;
 
 /**
  * This file provides basic Telop driving for a Pushbot robot.
@@ -52,13 +48,12 @@ import java.util.Locale;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Mainbot: Teleop Tank 2P", group="Pushbot")
+@TeleOp(name="Mainbot: Testing", group="Mainbot")
 //@Disabled
-public class MainbotTeleopTank_Iterative_Sean extends OpMode{
+public class MainTeleopTest extends OpMode{
 
     /* Declare OpMode members. */
-    HardwareMatthewbot robot       = new HardwareMatthewbot(); // use the class created to define a Pushbot's hardware
-    // could also use HardwarePushbotMatrix class.
+    HardwareMatthewbot robot       = new HardwareMatthewbot();
     int x = 0;
     // hsvValues is an array that will hold the hue, saturation, and value information.
     float hsvValues[] = {0F, 0F, 0F};
@@ -78,15 +73,10 @@ public class MainbotTeleopTank_Iterative_Sean extends OpMode{
          * The init() method of the hardware class does all the work here
          */
         robot.init(hardwareMap);
-     //   robot.leftBumper.setPosition(.5);
-     //   robot.leftStageTwo.setPosition(1);
-       // robot.rightStageTwo.setPosition(0.1);
-        robot.colorDrop.setPosition(0.45);
-        robot.align.setPosition(0.95);
+        //start with the ramp down and jewel detector up and aligner in
+        robot.colorDrop.setPosition(0.68);
+        robot.align.setPosition(0.43);
 
-      //  robot.rightBumper.setPosition(.7);
-
-        // Send telemetry message to signify robot waiting;
         telemetry.addData("Say", "Hello Driver");    //
     }
 
@@ -110,7 +100,7 @@ public class MainbotTeleopTank_Iterative_Sean extends OpMode{
     @Override
     public void loop() {
 //        double left;
-        robot.colorDrop.setPosition(0.45);
+       // robot.colorDrop.setPosition(0.45); //have the jewel detector move slightly out so not in way of flipper
 
         double Righty, Lefty, sideRight, sideLeft;
         double phaseUp;
@@ -121,44 +111,35 @@ public class MainbotTeleopTank_Iterative_Sean extends OpMode{
         double phaseUp2;
         double phaseDown2;
 
-        // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
+        //set variables to controls on game controller
         Lefty = gamepad1.right_stick_y;
         Righty = gamepad1.left_stick_y;
         sideRight= gamepad1.left_stick_x;
         sideLeft=gamepad1.right_stick_x;
-        phaseUp = gamepad2.right_trigger;
-        phaseDown = gamepad2.left_trigger;
         straffeL = gamepad1.right_bumper;
         straffeR = gamepad1.left_bumper;
         straffeL2 = gamepad2.right_bumper;
         straffeR2 = gamepad2.left_bumper;
-        //turnL = gamepad1.left_trigger;
-        //turnR= gamepad1.left_trigger;
-
-        Lefty2 = gamepad1.right_stick_y;
-        Righty2 = gamepad1.left_stick_y;
-        sideRight2= gamepad1.left_stick_x;
-        sideLeft2=gamepad1.right_stick_x;
-        //phaseUp2 = gamepad1.right_trigger;
-        //phaseDown2 = gamepad1.left_trigger;
+        phaseUp2 = gamepad1.right_trigger;
+        phaseDown2 = gamepad1.left_trigger;
 
 
+/*              DRIVING CONTROLS        */
 
-
-        if(sideRight!=0&&sideLeft<0) {
+        if(sideRight!=0&&sideLeft<0) {//Straffe while turning left
             robot.leftFrontDrive.setPower(sideLeft);
             robot.rightFrontDrive.setPower(sideLeft);
             robot.leftRearDrive.setPower(sideLeft * -1);
             robot.rightRearDrive.setPower(sideLeft);
         }
-        else if(sideRight!=0&&sideLeft>0)
+        else if(sideRight!=0&&sideLeft>0)//Straffe while turrning right
         {
             robot.leftFrontDrive.setPower(sideLeft);
             robot.rightFrontDrive.setPower(sideLeft*-1);
             robot.leftRearDrive.setPower(sideLeft);
             robot.rightRearDrive.setPower(sideLeft);
         }
-        else if(sideLeft!=0)
+        else if(sideLeft!=0)//normal Straffe
         {
             robot.leftFrontDrive.setPower(sideLeft);
             robot.rightFrontDrive.setPower(sideLeft*-1);
@@ -166,27 +147,27 @@ public class MainbotTeleopTank_Iterative_Sean extends OpMode{
             robot.rightRearDrive.setPower(sideLeft);
 
         }
-        else if(Righty<0&&sideRight<0)
+        else if(Righty<0&&sideRight<0)//rotate left
         {
             robot.leftFrontDrive.setPower(-.5);
             robot.rightFrontDrive.setPower(-.9);
             robot.leftRearDrive.setPower(-.5);
             robot.rightRearDrive.setPower(-.9);
         }
-        else if(Righty<0&&sideRight>0) {
+        else if(Righty<0&&sideRight>0) {//rotate right
             robot.leftFrontDrive.setPower(-.9);
             robot.rightFrontDrive.setPower(-.5);
             robot.leftRearDrive.setPower(-.9);
             robot.rightRearDrive.setPower(-.5);
         }
-        else if(Righty==0&&sideRight!=0)
+        else if(Righty==0&&sideRight!=0)//spin in place
         {
             robot.leftFrontDrive.setPower(sideRight*-.7);
             robot.rightFrontDrive.setPower(sideRight*.7);
             robot.leftRearDrive.setPower(sideRight*-.7);
             robot.rightRearDrive.setPower(sideRight*.7);
         }
-        else if(Righty<0&&sideRight==0)
+        else if(Righty<0&&sideRight==0)//drive forward/backwards
         {
             robot.leftFrontDrive.setPower(Righty);
             robot.rightFrontDrive.setPower(Righty);
@@ -194,7 +175,7 @@ public class MainbotTeleopTank_Iterative_Sean extends OpMode{
             robot.rightRearDrive.setPower(Righty);
 
         }
-        else if(Righty>0)
+        else if(Righty>0)//drive forward
         {
             robot.leftFrontDrive.setPower(Righty);
             robot.rightFrontDrive.setPower(Righty);
@@ -209,7 +190,7 @@ public class MainbotTeleopTank_Iterative_Sean extends OpMode{
             robot.leftRearDrive.setPower(Lefty);
             robot.rightRearDrive.setPower(Lefty);
         }
-        else if(straffeL==true||straffeL2==true)
+        else if(straffeL==true||straffeL2==true)//slow straffe left
         {
             robot.leftFrontDrive.setPower(.2);
             robot.rightFrontDrive.setPower(-.2);
@@ -217,14 +198,14 @@ public class MainbotTeleopTank_Iterative_Sean extends OpMode{
             robot.rightRearDrive.setPower(.2);
         }
 
-        else if(straffeR==true||straffeR2==true)
+        else if(straffeR==true||straffeR2==true)//slow straffe right
         {
             robot.leftFrontDrive.setPower(-.2);
             robot.rightFrontDrive.setPower(.2);
             robot.leftRearDrive.setPower(.2);
             robot.rightRearDrive.setPower(-.2);
         }
-        else
+        else // if not doing the above stop
         {
             robot.leftFrontDrive.setPower(0);
             robot.rightFrontDrive.setPower(0);
@@ -234,138 +215,62 @@ public class MainbotTeleopTank_Iterative_Sean extends OpMode{
         }
 
 
-        ///player 1
-        if ((phaseDown >0)) {
+
+/*       OTHER CONTROLS         */
+
+
+        if ((phaseDown2 >0)) {//Left Trigger move the wheels to collect glyphs
             robot.leftStageOne.setPower(1);
             robot.rightStageOne.setPower(1);
         }
 
-        else if ((phaseUp >0)) {
+        else if ((phaseUp2 >0)) {//Right trigger move wheels to spit out glyphs
             robot.leftStageOne.setPower(-1);
             robot.rightStageOne.setPower(-1);
         }
 
-        else {
+        else {// if not hitting either trigger stop wheels
             robot.rightStageOne.setPower(0);
             robot.leftStageOne.setPower(0);
         }
 
-/*
-        if (gamepad1.y){
-            robot.leftStageTwo.setPosition(1);
-            robot.rightStageTwo.setPosition(0.1);
+
+        if(gamepad1.dpad_left) {//DPad left puts out alignment rod
+            robot.align.setPosition(.43);
         }
-        if(gamepad1.x)
+        if(gamepad1.dpad_right)//DPad right puts in alignment rod
         {
-            robot.leftStageTwo.setPosition(.4);
-            robot.rightStageTwo.setPosition(.7);
-        }
-        if (gamepad1.a){
-            robot.leftStageTwo.setPosition(0.12);
-            robot.rightStageTwo.setPosition(.98);
-        }
-        */
-    if(gamepad1.a) {
-        robot.align.setPosition(.57);
-    }
-    if(gamepad1.x)
-    {
-        robot.align.setPosition(0.95);
-    }
-        if (gamepad1.b){
-            robot.colorDrop.setPosition(.35);
+           robot.align.setPosition(0.90);
         }
 
 
 
-
-        if (gamepad2.a){
-        //    robot.leftStageTwo.setPosition(1);
-          //  robot.rightStageTwo.setPosition(0.1);
-        }
-        if(gamepad2.x)
+        if(gamepad1.dpad_up)
         {
-       //     robot.leftStageTwo.setPosition(.4);
-         //   robot.rightStageTwo.setPosition(.7);
+            robot.colorDrop.setPosition(0.05);
         }
-        if (gamepad2.y){//lift up
-           // robot.leftStageTwo.setPosition(0.12);
-            //robot.rightStageTwo.setPosition(.98);
-        }
-        if (gamepad2.b){
-            robot.colorDrop.setPosition(.35);
+        if(gamepad1.dpad_down)
+        {
+            robot.colorDrop.setPosition(0.68);
         }
 
 
-
-
-
-
-        /*
-        if (gamepad1.right_bumper == true){
-        //    robot.leftBumper.setPosition(robot.leftBumper.getPosition()+.05);
-            sleep(2000);
+        if (gamepad1.a&&robot.digitalTouch.getState() == true){// a puts down the flipper       TRUE is not pressed
+            robot.stageTwo.setPower(-.6);
         }
-        else if (gamepad1.left_bumper == true){
-          ///  robot.leftBumper.setPosition(robot.leftBumper.getPosition()-.05);
-
+        else if (gamepad1.y){// y lifts flipper all the way
+           robot.stageTwo.setPower(.6);
         }
-        else{
-            ///robot.leftBumper.setPosition(robot.leftBumper.getPosition());
+        else
+        {
+            robot.stageTwo.setPower(0);
         }
-        */
-        /*
 
-         */
-   //     if (gamepad2.dpad_down){
-     //       robot.relicServo.setPosition(robot.relicServo.getPosition()+.025);
-       // }
-        //else if(gamepad2.dpad_up){
-         //   robot.relicServo.setPosition(robot.relicServo.getPosition()-.025);
-       // }
-       // else{
-        //    robot.relicServo.setPosition(robot.relicServo.getPosition());
-        //}
 
-//        if (gamepad2.dpad_left){
- //           robot.relicDropperServo.setPosition(robot.relicDropperServo.getPosition()+.025);
-  //      }
-    //    else if (gamepad2.dpad_right){
-     //       robot.relicDropperServo.setPosition(robot.relicDropperServo.getPosition()-.025);
-      //  }
-       // else {
-        //    robot.relicDropperServo.setPosition(robot.relicDropperServo.getPosition());
-        //}
-   //     if (gamepad2.left_trigger>5){
- //           robot.relicMotor.setPower(.5);
-     //   }
-        //else if (gamepad2.left_bumper){
-       //     robot.relicMotor.setPower(-.5);
-        //}
-        //else{
-        //    robot.relicMotor.setPower(0);
-       // }
+        telemetry.addData("cm1", "%.2f cm", robot.rangeSensor1.getDistance(DistanceUnit.CM));//add try catch
+     
+        telemetry.addData("cm2", "%.2f cm", robot.rangeSensor2.getDistance(DistanceUnit.CM));//add try catch
 
-        // Send telemetry message to signify robot running;
-        //  telemetry.addData("claw",  "Offset = %.2f", clawOffset);
-  //      telemetry.addData("sideright",  "%.2f", sideRight);
-    //    telemetry.addData("right", "%.2f", Left);
-        //    telemetry.addData("sideright",  "%.2f", sideRight);
-        //  telemetry.addData("left", "%.2f", sideLeft);
-/*
-        //distance = robot.sensorDistance.getDistance(DistanceUnit.CM);
-        // send the info back to driver station using telemetry function.
-        telemetry.addData("Distance (cm)",
-                String.format(Locale.US, "%.02f", robot.sensorDistance.getDistance(DistanceUnit.CM)));
-        telemetry.addData("Alpha", robot.sensorColor.alpha());
-        telemetry.addData("Red  ", robot.sensorColor.red());
-        telemetry.addData("Green", robot.sensorColor.green());
-        telemetry.addData("Blue ", robot.sensorColor.blue());
-        */
-        telemetry.addData("phaseUp ", phaseUp);
-        telemetry.addData("sideRight ", sideRight);
-      //  telemetry.addData("right bumper: ", robot.rightBumper.getPosition());
-   //     telemetry.addData("left bumper: ", robot.leftBumper.getPosition());
         telemetry.update();
     }
 

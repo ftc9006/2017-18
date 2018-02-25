@@ -98,7 +98,7 @@ public class MainbotAutoRedLeft extends LinearOpMode {
     @Override public void runOpMode() {
 
         robot.init(hardwareMap);
-        robot.leftStageTwo.setPosition(.35);robot.rightStageTwo.setPosition(.75);
+      //  robot.leftStageTwo.setPosition(.35);robot.rightStageTwo.setPosition(.75);
 
 
 
@@ -385,8 +385,8 @@ public class MainbotAutoRedLeft extends LinearOpMode {
 
                     sleep(200);
 
-                    robot.leftStageTwo.setPosition(1);
-                    robot.rightStageTwo.setPosition(0);
+              //      robot.leftStageTwo.setPosition(1);
+                //    robot.rightStageTwo.setPosition(0);
                     telemetry.addData("Path", "Complete");
                     telemetry.update();
                     position=0;
@@ -459,8 +459,8 @@ public class MainbotAutoRedLeft extends LinearOpMode {
 
                     sleep(200);
 
-                    robot.leftStageTwo.setPosition(1);
-                    robot.rightStageTwo.setPosition(0);
+             //       robot.leftStageTwo.setPosition(1);
+               //     robot.rightStageTwo.setPosition(0);
                     telemetry.addData("Path", "Complete");
                     telemetry.update();
                     position = 0;
@@ -533,8 +533,8 @@ public class MainbotAutoRedLeft extends LinearOpMode {
 
                     sleep(200);
 
-                    robot.leftStageTwo.setPosition(1);
-                    robot.rightStageTwo.setPosition(0);
+            //        robot.leftStageTwo.setPosition(1);
+              //      robot.rightStageTwo.setPosition(0);
                     telemetry.addData("Path", "Complete");
                     telemetry.update();
                     position=0;
