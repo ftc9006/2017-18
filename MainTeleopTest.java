@@ -28,10 +28,15 @@
  */
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 /**
  * This file provides basic Telop driving for a Pushbot robot.
@@ -51,6 +56,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 @TeleOp(name="Mainbot: Testing", group="Mainbot")
 //@Disabled
 public class MainTeleopTest extends OpMode{
+
+    Orientation angles;
+    BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
 
     /* Declare OpMode members. */
     HardwareMatthewbot robot       = new HardwareMatthewbot();
@@ -235,10 +243,10 @@ public class MainTeleopTest extends OpMode{
         }
 
 
-        if(gamepad1.dpad_left) {//DPad left puts out alignment rod
+        if(gamepad1.dpad_left) {//DPad left puts in alignment rod
             robot.align.setPosition(.43);
         }
-        if(gamepad1.dpad_right)//DPad right puts in alignment rod
+        if(gamepad1.dpad_right)//DPad right puts out alignment rod
         {
            robot.align.setPosition(0.90);
         }
@@ -266,10 +274,21 @@ public class MainTeleopTest extends OpMode{
             robot.stageTwo.setPower(0);
         }
 
+        try {
 
-        telemetry.addData("cm1", "%.2f cm", robot.rangeSensor1.getDistance(DistanceUnit.CM));//add try catch
-     
-        telemetry.addData("cm2", "%.2f cm", robot.rangeSensor2.getDistance(DistanceUnit.CM));//add try catch
+
+                angles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+                // record the starting orientation of the robot
+                float startZ = AngleUnit.DEGREES.normalize(angles.firstAngle);
+                telemetry.addData("Z: ", startZ);
+                telemetry.addData("cm1", "%.2f cm", robot.rangeSensor1.getDistance(DistanceUnit.CM));//add try catch
+
+                telemetry.addData("cm2", "%.2f cm", robot.rangeSensor2.getDistance(DistanceUnit.CM));//add try catch
+            }
+            catch(Exception e)
+            {
+                telemetry.addData("Error: ", "US");
+            }
 
         telemetry.update();
     }

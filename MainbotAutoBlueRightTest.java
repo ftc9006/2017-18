@@ -423,7 +423,7 @@ public class MainbotAutoBlueRightTest extends LinearOpMode {
 
                     sleep(200);
 
-                    robot.stageTwo.setPower(-.6);
+                    robot.stageTwo.setPower(.6);
                     sleep(400);
                     robot.stageTwo.setPower(0);
                     telemetry.addData("Path", "Complete");
@@ -531,7 +531,7 @@ public class MainbotAutoBlueRightTest extends LinearOpMode {
 
                     sleep(200);
 
-                    robot.stageTwo.setPower(-.6);
+                    robot.stageTwo.setPower(.6);
                     sleep(400);
                     robot.stageTwo.setPower(0);
                     telemetry.addData("Path", "Complete");
@@ -640,7 +640,7 @@ public class MainbotAutoBlueRightTest extends LinearOpMode {
 
                     sleep(200);
 
-                    robot.stageTwo.setPower(-.6);
+                    robot.stageTwo.setPower(.6);
                     sleep(400);
                     robot.stageTwo.setPower(0);
                     telemetry.addData("Path", "Complete");

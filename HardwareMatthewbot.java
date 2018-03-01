@@ -162,7 +162,7 @@ public class HardwareMatthewbot
 
 
         colorDrop.setPosition(0.75); //put the jewel arm up
-        align.setPosition(.95); // put the glyph aligner in
+        align.setPosition(.43); // put the glyph aligner in
 
 
         //set motors to run without encoders
