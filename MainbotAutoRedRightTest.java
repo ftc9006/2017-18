@@ -69,8 +69,8 @@ import java.util.Locale;
  *
  */
 
-@Autonomous(name="Mainbot: Red Auto Right", group ="Concept")
-@Disabled
+@Autonomous(name="Mainbot: Red  Right", group ="b")
+//@Disabled
 public class MainbotAutoRedRightTest extends LinearOpMode {
 
     public static final String TAG = "Vuforia VuMark Sample";

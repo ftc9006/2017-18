@@ -266,7 +266,7 @@ static int State= 0;
                     /**
                      * Go get more glyphs
                      */
-                    extraGlyph();
+                    //extraGlyph();
 
                 }
            }
@@ -359,10 +359,14 @@ static int State= 0;
             robot.leftRearDrive.setPower(0);
             robot.rightRearDrive.setPower(0);
             sleep(100);
+            telemetry.addData("State",State);
+            telemetry.update();
             State = 1;
         }
         //rotate to face wall
         if (State == 1) {
+            telemetry.addData("State",State);
+            telemetry.update();
             angles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
             z = AngleUnit.DEGREES.normalize(angles.firstAngle);
             if (z < 0)
@@ -381,11 +385,14 @@ static int State= 0;
                 robot.rightRearDrive.setPower(0);
                 sleep(100);
             }
+
         }
 
 
         //drive to wall
         if (State == 2) {
+            telemetry.addData("State",State);
+            telemetry.update();
             try {
 
                 robot.leftFrontDrive.setPower(.25);
@@ -394,9 +401,9 @@ static int State= 0;
                 robot.rightRearDrive.setPower(.25);
 
 
-                telemetry.addData("cm1", "%.2f cm", robot.rangeSensor1.getDistance(DistanceUnit.CM));//add try catch
+              //  telemetry.addData("cm1", "%.2f cm", robot.rangeSensor1.getDistance(DistanceUnit.CM));//add try catch
 
-                telemetry.addData("cm2", "%.2f cm", robot.rangeSensor2.getDistance(DistanceUnit.CM));//add try catch
+              //  telemetry.addData("cm2", "%.2f cm", robot.rangeSensor2.getDistance(DistanceUnit.CM));//add try catch
 
                 telemetry.update();
 
@@ -424,13 +431,15 @@ static int State= 0;
 
         //strafe until lined up
         if(State==3){
+            telemetry.addData("State",State);
+            telemetry.update();
             robot.leftFrontDrive.setPower(.2);
             robot.rightFrontDrive.setPower(-.2);
             robot.leftRearDrive.setPower(-.25);
             robot.rightRearDrive.setPower(.25);
-            telemetry.addData("cm1", "%.2f cm", robot.rangeSensor1.getDistance(DistanceUnit.CM));//add try catch
+//            telemetry.addData("cm1", "%.2f cm", robot.rangeSensor1.getDistance(DistanceUnit.CM));//add try catch
 
-            telemetry.addData("cm2", "%.2f cm", robot.rangeSensor2.getDistance(DistanceUnit.CM));//add try catch
+  //          telemetry.addData("cm2", "%.2f cm", robot.rangeSensor2.getDistance(DistanceUnit.CM));//add try catch
 
             telemetry.update();
             if(robot.rangeSensor2.getDistance(DistanceUnit.CM) > 12)
@@ -453,7 +462,8 @@ static int State= 0;
 
         if(State==4)
         {
-
+            telemetry.addData("State",State);
+            telemetry.update();
             robot.leftFrontDrive.setPower(0);
             robot.rightFrontDrive.setPower(.2);
             robot.leftRearDrive.setPower(0);
@@ -490,6 +500,8 @@ static int State= 0;
         {
 
             if(State==5) {
+                telemetry.addData("State",State);
+                telemetry.update();
 
                 robot.leftFrontDrive.setPower(.35);
                 robot.rightFrontDrive.setPower(-.35);
@@ -500,13 +512,15 @@ static int State= 0;
             }
 
             if(State==6) {
+                telemetry.addData("State",State);
+                telemetry.update();
                 robot.leftFrontDrive.setPower(.2);
                 robot.rightFrontDrive.setPower(-.2);
                 robot.leftRearDrive.setPower(-.25);
                 robot.rightRearDrive.setPower(.25);
-                telemetry.addData("cm1", "%.2f cm", robot.rangeSensor1.getDistance(DistanceUnit.CM));//add try catch
+//                telemetry.addData("cm1", "%.2f cm", robot.rangeSensor1.getDistance(DistanceUnit.CM));//add try catch
 
-                telemetry.addData("cm2", "%.2f cm", robot.rangeSensor2.getDistance(DistanceUnit.CM));//add try catch
+  //              telemetry.addData("cm2", "%.2f cm", robot.rangeSensor2.getDistance(DistanceUnit.CM));//add try catch
 
                 telemetry.update();
                 if(robot.rangeSensor2.getDistance(DistanceUnit.CM) > 14)
@@ -527,6 +541,8 @@ static int State= 0;
             }
 
           if(State==7){
+              telemetry.addData("State",State);
+              telemetry.update();
                 robot.leftFrontDrive.setPower(0);
                 robot.rightFrontDrive.setPower(.2);
                 robot.leftRearDrive.setPower(0);
@@ -559,6 +575,8 @@ static int State= 0;
         if (position==3)     // Left Column
         {
             if(State==5) {
+                telemetry.addData("State",State);
+                telemetry.update();
                 robot.leftFrontDrive.setPower(.35);
                 robot.rightFrontDrive.setPower(-.35);
                 robot.leftRearDrive.setPower(-.35);
@@ -568,13 +586,15 @@ static int State= 0;
             }
 
             if(State==6) {
+                telemetry.addData("State",State);
+                telemetry.update();
                 robot.leftFrontDrive.setPower(.2);
                 robot.rightFrontDrive.setPower(-.2);
                 robot.leftRearDrive.setPower(-.25);
                 robot.rightRearDrive.setPower(.25);
-                telemetry.addData("cm1", "%.2f cm", robot.rangeSensor1.getDistance(DistanceUnit.CM));//add try catch
+//                telemetry.addData("cm1", "%.2f cm", robot.rangeSensor1.getDistance(DistanceUnit.CM));//add try catch
 
-                telemetry.addData("cm2", "%.2f cm", robot.rangeSensor2.getDistance(DistanceUnit.CM));//add try catch
+  //              telemetry.addData("cm2", "%.2f cm", robot.rangeSensor2.getDistance(DistanceUnit.CM));//add try catch
 
                 telemetry.update();
                 if(robot.rangeSensor2.getDistance(DistanceUnit.CM)>14)
@@ -596,7 +616,8 @@ static int State= 0;
 
             if(State==7)
             {
-
+                telemetry.addData("State",State);
+                telemetry.update();
                 robot.leftFrontDrive.setPower(0);
                 robot.rightFrontDrive.setPower(.2);
                 robot.leftRearDrive.setPower(0);
@@ -632,13 +653,15 @@ static int State= 0;
 
 
             if(State==8) {
+                telemetry.addData("State",State);
+                telemetry.update();
                 robot.leftFrontDrive.setPower(.2);
                 robot.rightFrontDrive.setPower(-.2);
                 robot.leftRearDrive.setPower(-.25);
                 robot.rightRearDrive.setPower(.25);
-                telemetry.addData("cm1", "%.2f cm", robot.rangeSensor1.getDistance(DistanceUnit.CM));//add try catch
+    //            telemetry.addData("cm1", "%.2f cm", robot.rangeSensor1.getDistance(DistanceUnit.CM));//add try catch
 
-                telemetry.addData("cm2", "%.2f cm", robot.rangeSensor2.getDistance(DistanceUnit.CM));//add try catch
+//                telemetry.addData("cm2", "%.2f cm", robot.rangeSensor2.getDistance(DistanceUnit.CM));//add try catch
 
                 telemetry.update();
                 if(robot.rangeSensor2.getDistance(DistanceUnit.CM)>17)
@@ -654,7 +677,8 @@ static int State= 0;
 
             if(State==9)
             {
-
+                telemetry.addData("State",State);
+                telemetry.update();
                 robot.leftFrontDrive.setPower(0);
                 robot.rightFrontDrive.setPower(.2);
                 robot.leftRearDrive.setPower(0);
@@ -685,6 +709,8 @@ static int State= 0;
         }
 
         if(State==11) {
+            telemetry.addData("State",State);
+            telemetry.update();
             x=1;
             robot.stageTwo.setPower(.6);
             sleep(1000);

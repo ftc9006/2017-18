@@ -64,8 +64,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
  * if able grab more and stack on the right
  */
 
-@Autonomous(name="Mainbot: Red Left", group ="a")
-@Disabled
+@Autonomous(name="Mainbot: Red Left", group ="b")
+//@Disabled
 public class MainbotAutoRedLeftTest extends LinearOpMode {
 
     public static final String TAG = "Vuforia VuMark Sample";
@@ -265,7 +265,7 @@ public class MainbotAutoRedLeftTest extends LinearOpMode {
                     /**
                      * Go get more glyphs
                      */
-                    extraGlyph();
+                    //extraGlyph();
 
                 }
             }
@@ -391,7 +391,7 @@ public class MainbotAutoRedLeftTest extends LinearOpMode {
 
                 telemetry.update();
 
-            } while (robot.rangeSensor2.getDistance(DistanceUnit.CM) > 17);
+            } while (robot.rangeSensor2.getDistance(DistanceUnit.CM) > 19);
         } catch (Exception e) {
             telemetry.addData("err", "distance2");//add try catch
 
@@ -403,11 +403,13 @@ public class MainbotAutoRedLeftTest extends LinearOpMode {
         robot.leftRearDrive.setPower(0);
         robot.rightRearDrive.setPower(0);
         sleep(100);
+
+
         robot.leftFrontDrive.setPower(0);
         robot.rightFrontDrive.setPower(-.2);
         robot.leftRearDrive.setPower(0);
         robot.rightRearDrive.setPower(-.2);
-        sleep(50);
+        sleep(350);
         //strafe until lined up
         do {
             robot.leftFrontDrive.setPower(.2);
@@ -469,6 +471,11 @@ public class MainbotAutoRedLeftTest extends LinearOpMode {
             robot.rightRearDrive.setPower(.35);
             sleep(500);
 
+            robot.leftFrontDrive.setPower(0);
+            robot.rightFrontDrive.setPower(-.2);
+            robot.leftRearDrive.setPower(0);
+            robot.rightRearDrive.setPower(-.2);
+            sleep(350);
             do {
                 robot.leftFrontDrive.setPower(.2);
                 robot.rightFrontDrive.setPower(-.2);
@@ -524,6 +531,11 @@ public class MainbotAutoRedLeftTest extends LinearOpMode {
             robot.rightRearDrive.setPower(.35);
             sleep (500);
 
+            robot.leftFrontDrive.setPower(0);
+            robot.rightFrontDrive.setPower(-.2);
+            robot.leftRearDrive.setPower(0);
+            robot.rightRearDrive.setPower(-.2);
+            sleep(350);
             do {
                 robot.leftFrontDrive.setPower(.2);
                 robot.rightFrontDrive.setPower(-.2);
@@ -576,6 +588,11 @@ public class MainbotAutoRedLeftTest extends LinearOpMode {
             robot.rightRearDrive.setPower(.35);
             sleep (500);
 
+            robot.leftFrontDrive.setPower(0);
+            robot.rightFrontDrive.setPower(-.2);
+            robot.leftRearDrive.setPower(0);
+            robot.rightRearDrive.setPower(-.2);
+            sleep(350);
             do {
                 robot.leftFrontDrive.setPower(.2);
                 robot.rightFrontDrive.setPower(-.2);

@@ -228,12 +228,12 @@ public class MainTeleopTest extends OpMode{
 /*       OTHER CONTROLS         */
 
 
-        if ((phaseDown2 >0)) {//Left Trigger move the wheels to collect glyphs
+        if (gamepad1.left_trigger >0) {//Left Trigger move the wheels to collect glyphs
             robot.leftStageOne.setPower(1);
             robot.rightStageOne.setPower(1);
         }
 
-        else if ((phaseUp2 >0)) {//Right trigger move wheels to spit out glyphs
+        else if ((gamepad1.right_trigger >0)) {//Right trigger move wheels to spit out glyphs
             robot.leftStageOne.setPower(-1);
             robot.rightStageOne.setPower(-1);
         }
@@ -264,7 +264,7 @@ public class MainTeleopTest extends OpMode{
         }
         if(gamepad1.dpad_right)//DPad right puts out alignment rod
         {
-           robot.align.setPosition(0.90);
+           robot.align.setPosition(0.0);
         }
 
 
