@@ -69,6 +69,7 @@ public class HardwareMatthewbot
     public DcMotor  rightStageOne   = null;//Cube Collection Mechanism
     public DcMotor  relicMotor = null;// Scissor Jack
     public DcMotor  stageTwo = null;
+    public DcMotor  stageThree = null;
     public DcMotor BadMeme = null; // meme
 
 
@@ -82,6 +83,7 @@ public class HardwareMatthewbot
     public Servo    relicDropperServo = null;
     public CRServo  ramp = null;
     public Servo    colorDrop = null;
+    public Servo  relic = null;
 
     //Sensors
     public BNO055IMU imu=null; //for gyro
@@ -117,13 +119,13 @@ public class HardwareMatthewbot
         leftStageOne = hwMap.get(DcMotor.class, "lp1");
         rightStageOne = hwMap.get(DcMotor.class, "rp1");
         stageTwo = hwMap.get(DcMotor.class,"s2");
-       // BadMeme = hwMap.get(DcMotor.class, "u gay");
+        stageThree = hwMap.get(DcMotor.class,"s3");
 
          // define and initialize servos
         align = hwMap.get(Servo.class, "al");//2
         colorDrop = hwMap.get(Servo.class, "cd");//3
-        ramp = hwMap.get(CRServo.class, "r");//0
-
+       // ramp = hwMap.get(CRServo.class, "r");//0
+        relic = hwMap.get(Servo.class,"relic");
 
         //define and initialize sensors
         sensorColor = hwMap.get(ColorSensor.class, "sensor1"); //these are for the jewel detector
@@ -150,6 +152,7 @@ public class HardwareMatthewbot
         leftStageOne.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
         rightStageOne.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
         stageTwo.setDirection(DcMotor.Direction.FORWARD);
+        stageThree.setDirection(DcMotor.Direction.FORWARD);
 
         // Set all motors to zero power
         leftFrontDrive.setPower(0);
@@ -159,10 +162,12 @@ public class HardwareMatthewbot
         leftStageOne.setPower(0);
         rightStageOne.setPower(0);
         stageTwo.setPower(0);
+        stageThree.setPower(0);
 
 
         colorDrop.setPosition(0.75); //put the jewel arm up
         align.setPosition(.43); // put the glyph aligner in
+        relic.setPosition(0);
 
 
         //set motors to run without encoders
@@ -175,6 +180,8 @@ public class HardwareMatthewbot
         rightStageOne.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         stageTwo.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        stageThree.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
     }
  }
 

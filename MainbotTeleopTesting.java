@@ -106,8 +106,8 @@ public class MainbotTeleopTesting extends OpMode{
          */
         robot.init(hardwareMap);
      //   robot.leftBumper.setPosition(.5);
-        robot.rightStageTwo.setPosition(.5);
-        robot.leftStageTwo.setPosition(.5);
+     //   robot.rightStageTwo.setPosition(.5);
+     //   robot.leftStageTwo.setPosition(.5);
         robot.colorDrop.setPosition(0.35);
         //robot.imu.startAccelerationIntegration(new Position(),new Velocity(),1000);
         robot.imu.startAccelerationIntegration(new Position() ,new Velocity(),500);
@@ -322,7 +322,7 @@ if(gamepad1.x)
 }
 
 
-
+/*
         Color.RGBToHSV((int) (robot.sensorColor2.red() * SCALE_FACTOR),
                 (int) (robot.sensorColor2.green() * SCALE_FACTOR),
                 (int) (robot.sensorColor2.blue() * SCALE_FACTOR),

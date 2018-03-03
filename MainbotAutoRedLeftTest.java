@@ -51,6 +51,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefau
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 import java.util.Locale;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 /**
  * This OpMode does the following:
@@ -61,15 +62,10 @@ import java.util.Locale;
  * drive to place glyph
  * park
  * if able grab more and stack on the right
- *
- *
- *
- * change parts from pushbot to main bot
- *
  */
 
-@Autonomous(name="Mainbot: Red Auto Left", group ="Concept")
-//@Disabled
+@Autonomous(name="Mainbot: Red Left", group ="a")
+@Disabled
 public class MainbotAutoRedLeftTest extends LinearOpMode {
 
     public static final String TAG = "Vuforia VuMark Sample";
@@ -88,12 +84,22 @@ public class MainbotAutoRedLeftTest extends LinearOpMode {
             (WHEEL_DIAMETER_INCHES * 3.1415);
     static final double     DRIVE_SPEED             = 0.6;
     static final double     TURN_SPEED              = 0.5;
+    final double SCALE_FACTOR = 255;
+    // hsvValues is an array that will hold the hue, saturation, and value information.
+    float hsvValues[] = {0F, 0F, 0F};
+
+    // values is a reference to the hsvValues array.
+    final float values[] = hsvValues;
+
     static int x = 0,y=0;
     static float z=0,startZ=0,checkZ=0;
     static int position=0;
     static double distance=0;
     double tX , tY , tZ;
     int color =0;//1 red, 2 blue
+    static int shift1=100;
+    static int shift2=500;
+    static int shift3=700;
 
 
 
@@ -106,42 +112,19 @@ public class MainbotAutoRedLeftTest extends LinearOpMode {
     @Override public void runOpMode() {
 
         robot.init(hardwareMap);
-        //robot.leftStageTwo.setPosition(.35);robot.rightStageTwo.setPosition(.75);
 
         angles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-
-//startZ   20
-         startZ = AngleUnit.DEGREES.normalize(angles.firstAngle);
+        // record the starting orientation of the robot
+        startZ = AngleUnit.DEGREES.normalize(angles.firstAngle);
         if(startZ<0)
             startZ+=360;
 
 
-//        robot.rightRearDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-  //      robot.leftRearDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-//        telemetry.addData("Path0",  "Starting at %7d :%7d",
-  //              robot.leftDrive.getCurrentPosition(),
-    //            robot.rightDrive.getCurrentPosition());
-      //  telemetry.update();
 
-        //robot.leftClaw.setPosition(0.7);            // S4: Stop and close the claw.
-        //robot.rightClaw.setPosition(0.3);
 
-        // get a reference to the color sensor.
-//        sensorColor = hardwareMap.get(ColorSensor.class, "sensor_color_distance");
 
-        // get a reference to the distance sensor that shares the same name.
-  //      sensorDistance = hardwareMap.get(DistanceSensor.class, "sensor_color_distance");
 
-        // hsvValues is an array that will hold the hue, saturation, and value information.
-        float hsvValues[] = {0F, 0F, 0F};
-
-        // values is a reference to the hsvValues array.
-        final float values[] = hsvValues;
-
-        // sometimes it helps to multiply the raw RGB values with a scale factor
-        // to amplify/attentuate the measured values.
-        final double SCALE_FACTOR = 255;
 
         /*
          * To start up Vuforia, tell it the view that we wish to use for camera monitor (on the RC phone);
@@ -192,22 +175,15 @@ public class MainbotAutoRedLeftTest extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-/*
-            if(y==0) {
-                robot.ramp.setPower(1);
-                sleep(2000);
-                robot.ramp.setPower(0);
-                y=1;
-            }
-*/
 
             /**
              *
              * Scan cipher to get LEFT CENTER or RIGHT
              *
              */
+
             RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
-           if (x==0) {
+            if (vuMark == RelicRecoveryVuMark.UNKNOWN&&runtime.time()<250) {
 
                 /* Found an instance of the template. In the actual game, you will probably
                  * loop until this condition occurs, then move on to act accordingly depending
@@ -217,9 +193,9 @@ public class MainbotAutoRedLeftTest extends LinearOpMode {
                 /* For fun, we also exhibit the navigational pose. In the Relic Recovery game,
                  * it is perhaps unlikely that you will actually need to act on this pose information, but
                  * we illustrate it nevertheless, for completeness. */
-                OpenGLMatrix pose = ((VuforiaTrackableDefaultListener)relicTemplate.getListener()).getPose();
+                OpenGLMatrix pose = ((VuforiaTrackableDefaultListener) relicTemplate.getListener()).getPose();
                 telemetry.addData("Pose", format(pose));
-
+                telemetry.update();
 
 
                 /* We further illustrate how to decompose the pose into useful rotational and
@@ -229,30 +205,44 @@ public class MainbotAutoRedLeftTest extends LinearOpMode {
                     Orientation rot = Orientation.getOrientation(pose, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
 
                     // Extract the X, Y, and Z components of the offset of the target relative to the robot
-                     tX = trans.get(0);
-                     tY = trans.get(1);
-                     tZ = trans.get(2);
+                    tX = trans.get(0);
+                    tY = trans.get(1);
+                    tZ = trans.get(2);
 
                     // Extract the rotational components of the target relative to the robot
                     double rX = rot.firstAngle;
                     double rY = rot.secondAngle;
                     double rZ = rot.thirdAngle;
                 }
-
+            }
+            else
+            {
                 if (vuMark == RelicRecoveryVuMark.RIGHT) {
-                   position=1;
+                    telemetry.addData("VuMark", "%s visible", vuMark);
+                    telemetry.update();
+                    position = 1;
+                    telemetry.addData("position", position);
                     vuMark = RelicRecoveryVuMark.UNKNOWN;
-                }
-                else if (vuMark == RelicRecoveryVuMark.CENTER) {
-                   position=2;
+
+                } else if (vuMark == RelicRecoveryVuMark.CENTER) {
+                    telemetry.addData("VuMark", "%s visible", vuMark);
+                    telemetry.update();
+                    position = 2;
+                    telemetry.addData("position", position);
                     vuMark = RelicRecoveryVuMark.UNKNOWN;
-                }
-                else if (vuMark == RelicRecoveryVuMark.LEFT) {
-                   position=3;
+
+                } else if (vuMark == RelicRecoveryVuMark.LEFT) {
+                    telemetry.addData("VuMark", "%s visible", vuMark);
+                    telemetry.update();
+                    position = 3;
+                    telemetry.addData("position", position);
                     vuMark = RelicRecoveryVuMark.UNKNOWN;
+
+                } else {
+                    sleep (500);
+                    position = 2;
                 }
-                else
-                    position =2;
+
                 /**
                  *
                  * END Scan cipher to get LEFT CENTER or RIGHT
@@ -262,436 +252,23 @@ public class MainbotAutoRedLeftTest extends LinearOpMode {
 
                 /**
                  *   Drop color sensor  knock off jewel
-                 *   write code to lower sensor
                  */
+                if (x==0) {
+                    hitJewel();
 
 
-               robot.colorDrop.setPosition(0.05);
-                sleep(2000);
+                    /**
+                     * Drive to get lined up and shoot
+                     */
+                    driveToScore();
 
-                Color.RGBToHSV((int) (robot.sensorColor.red() * SCALE_FACTOR),
-                        (int) (robot.sensorColor.green() * SCALE_FACTOR),
-                        (int) (robot.sensorColor.blue() * SCALE_FACTOR),
-                        hsvValues);
-
-                distance = robot.sensorDistance.getDistance(DistanceUnit.CM);
-                // send the info back to driver station using telemetry function.
-                telemetry.addData("Distance (cm)",
-                        String.format(Locale.US, "%.02f", robot.sensorDistance.getDistance(DistanceUnit.CM)));
-             //   telemetry.addData("Alpha", robot.sensorColor.alpha());
-             //   telemetry.addData("Red  ", robot.sensorColor.red());
-             //   telemetry.addData("Green", robot.sensorColor.green());
-             //   telemetry.addData("Blue ", robot.sensorColor.blue());
-             //   telemetry.addData("Hue", hsvValues[0]);
-
-
-                if(robot.sensorColor.red()>robot.sensorColor.blue())
-                {
-                        color=1;
-                        robot.leftFrontDrive.setPower(-.25);
-                        robot.rightFrontDrive.setPower(-.25);
-                        robot.leftRearDrive.setPower(-.25);
-                        robot.rightRearDrive.setPower(-.25);
-
-                       sleep(250);
-
-                    robot.leftFrontDrive.setPower(0);
-                    robot.rightFrontDrive.setPower(0);
-                    robot.leftRearDrive.setPower(0);
-                    robot.rightRearDrive.setPower(0);
-                   sleep(500);
-                    robot.colorDrop.setPosition(0.68);
-                    sleep(1000);
-                }
-                else
-                {
-
-                    color=2;
-                    robot.leftFrontDrive.setPower(-.25);
-                    robot.rightFrontDrive.setPower(.25);
-                    robot.leftRearDrive.setPower(-.25);
-                    robot.rightRearDrive.setPower(.25);
-
-
-
-                   sleep(100);
-                    robot.leftFrontDrive.setPower(0);
-                    robot.rightFrontDrive.setPower(0);
-                    robot.leftRearDrive.setPower(0);
-                    robot.rightRearDrive.setPower(0);
-                    robot.colorDrop.setPosition(0.68);
-                    sleep(1000);
-
-                    robot.leftFrontDrive.setPower(.25);
-                    robot.rightFrontDrive.setPower(-.25);
-                    robot.leftRearDrive.setPower(.25);
-                    robot.rightRearDrive.setPower(-.25);
-
-
-
-                    sleep(100);
-                    robot.leftFrontDrive.setPower(0);
-                    robot.rightFrontDrive.setPower(0);
-                    robot.leftRearDrive.setPower(0);
-                    robot.rightRearDrive.setPower(0);
-                    sleep(500);
-
-
-
-
-
-
-
+                    /**
+                     * Go get more glyphs
+                     */
+                    extraGlyph();
 
                 }
-
-
-
-               // sleep(5000);
-                /**
-                 *   END Drop color sensor  knock off jewel
-                 *   raise color sensor
-                 */
-
-
-
-
-
-
-               ///telemetry.update();
-                /**
-                 *   Place Glyph in correct column - redo all code based on mechanism built
-                 *
-                 */
-                if(position==1) {
-                    x=1;
-                    robot.leftFrontDrive.setPower(-.45);
-                    robot.rightFrontDrive.setPower(-.45);
-                    robot.leftRearDrive.setPower(-.45);
-                    robot.rightRearDrive.setPower(-.45);
-
-
-                    if(color==2)
-                    {
-                        sleep(800);
-                    }else
-                        sleep(450);     // pause for servos to move
-
-                    robot.leftFrontDrive.setPower(0);
-                    robot.rightFrontDrive.setPower(0);
-                    robot.leftRearDrive.setPower(0);
-                    robot.rightRearDrive.setPower(0);
-                    telemetry.update();
-                    sleep(500);
-
-                    do {
-                        angles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-                        z = AngleUnit.DEGREES.normalize(angles.firstAngle);
-                        if(z<0)
-                            z+=360;
-
-                        robot.leftFrontDrive.setPower(.25);
-                        robot.rightFrontDrive.setPower(-.25);
-                        robot.leftRearDrive.setPower(.25);
-                        robot.rightRearDrive.setPower(-.25);
-
-                        if(z-startZ<0&&startZ>180) {
-                            startZ-=360;
-                        }
-
-                    }while(z-startZ>95|z-startZ<85);
-                    robot.leftFrontDrive.setPower(0);
-                    robot.rightFrontDrive.setPower(0);
-                    robot.leftRearDrive.setPower(0);
-                    robot.rightRearDrive.setPower(0);
-
-                    sleep(360);// turn left
-
-                    robot.leftFrontDrive.setPower(.9);
-                    robot.rightFrontDrive.setPower(.9);
-                    robot.leftRearDrive.setPower(.9);
-                    robot.rightRearDrive.setPower(.9);
-                    telemetry.update();
-
-                    sleep(275);     // pause for servos to move
-
-                    robot.leftFrontDrive.setPower(0);
-                    robot.rightFrontDrive.setPower(0);
-                    robot.leftRearDrive.setPower(0);
-                    robot.rightRearDrive.setPower(0);
-
-                    sleep(200);
-
-                    robot.stageTwo.setPower(.6);
-                    sleep(400);
-                    robot.stageTwo.setPower(0);
-                    telemetry.addData("Path", "Complete");
-                    telemetry.update();
-                    position=0;
-
-                    sleep(1000);
-
-                    robot.leftFrontDrive.setPower(-.25);
-                    robot.rightFrontDrive.setPower(-.25);
-                    robot.leftRearDrive.setPower(-.25);
-                    robot.rightRearDrive.setPower(-.25);
-
-
-                    sleep(500);
-
-                    robot.leftFrontDrive.setPower(0);
-                    robot.rightFrontDrive.setPower(0);
-                    robot.leftRearDrive.setPower(0);
-                    robot.rightRearDrive.setPower(0);
-
-                    sleep(300);
-
-                    robot.leftFrontDrive.setPower(.45);
-                    robot.rightFrontDrive.setPower(.45);
-                    robot.leftRearDrive.setPower(.45);
-                    robot.rightRearDrive.setPower(.45);
-                    telemetry.update();
-                    sleep(850);
-
-                    robot.leftFrontDrive.setPower(0);
-                    robot.rightFrontDrive.setPower(0);
-                    robot.leftRearDrive.setPower(0);
-                    robot.rightRearDrive.setPower(0);
-
-                    sleep (200);
-
-                    robot.leftFrontDrive.setPower(-.45);
-                    robot.rightFrontDrive.setPower(-.45);
-                    robot.leftRearDrive.setPower(-.45);
-                    robot.rightRearDrive.setPower(-.45);
-                    telemetry.update();
-                    sleep(100);
-
-                    robot.leftFrontDrive.setPower(0);
-                    robot.rightFrontDrive.setPower(0);
-                    robot.leftRearDrive.setPower(0);
-                    robot.rightRearDrive.setPower(0);
-                }
-                if(position==2) {
-                    x=1;
-                    robot.leftFrontDrive.setPower(-.45);
-                    robot.rightFrontDrive.setPower(-.45);
-                    robot.leftRearDrive.setPower(-.45);
-                    robot.rightRearDrive.setPower(-.45);
-
-
-                    if(color==2)
-                    {
-                        sleep(1150);
-                    }else
-                        sleep(625);
-                    robot.leftFrontDrive.setPower(0);
-                    robot.rightFrontDrive.setPower(0);
-                    robot.leftRearDrive.setPower(0);
-                    robot.rightRearDrive.setPower(0);
-
-                    sleep(500);
-
-                    do {
-                        angles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-                        z = AngleUnit.DEGREES.normalize(angles.firstAngle);
-                        if(z<0)
-                            z+=360;
-
-                        robot.leftFrontDrive.setPower(.25);
-                        robot.rightFrontDrive.setPower(-.25);
-                        robot.leftRearDrive.setPower(.25);
-                        robot.rightRearDrive.setPower(-.25);
-
-                        if(z-startZ<0&&startZ>180) {
-                            startZ-=360;
-                        }
-
-                    }while(z-startZ>95|z-startZ<85);
-                    robot.leftFrontDrive.setPower(0);
-                    robot.rightFrontDrive.setPower(0);
-                    robot.leftRearDrive.setPower(0);
-                    robot.rightRearDrive.setPower(0);
-
-                    sleep(360);// turn left
-
-                    robot.leftFrontDrive.setPower(.9);
-                    robot.rightFrontDrive.setPower(.9);
-                    robot.leftRearDrive.setPower(.9);
-                    robot.rightRearDrive.setPower(.9);
-
-
-                    sleep(275);     // pause for servos to move
-
-                    robot.leftFrontDrive.setPower(0);
-                    robot.rightFrontDrive.setPower(0);
-                    robot.leftRearDrive.setPower(0);
-                    robot.rightRearDrive.setPower(0);
-
-                    sleep(200);
-
-                    robot.stageTwo.setPower(.6);
-                    sleep(400);
-                    robot.stageTwo.setPower(0);
-                    telemetry.addData("Path", "Complete");
-                    telemetry.update();
-                    position=0;
-
-                    sleep(1000);
-
-                    robot.leftFrontDrive.setPower(-.25);
-                    robot.rightFrontDrive.setPower(-.25);
-                    robot.leftRearDrive.setPower(-.25);
-                    robot.rightRearDrive.setPower(-.25);
-
-
-                    sleep(500);
-
-                    robot.leftFrontDrive.setPower(0);
-                    robot.rightFrontDrive.setPower(0);
-                    robot.leftRearDrive.setPower(0);
-                    robot.rightRearDrive.setPower(0);
-
-                    sleep(300);
-
-                    robot.leftFrontDrive.setPower(.45);
-                    robot.rightFrontDrive.setPower(.45);
-                    robot.leftRearDrive.setPower(.45);
-                    robot.rightRearDrive.setPower(.45);
-
-                    sleep(850);
-
-                    robot.leftFrontDrive.setPower(0);
-                    robot.rightFrontDrive.setPower(0);
-                    robot.leftRearDrive.setPower(0);
-                    robot.rightRearDrive.setPower(0);
-
-                    sleep (200);
-
-                    robot.leftFrontDrive.setPower(-.45);
-                    robot.rightFrontDrive.setPower(-.45);
-                    robot.leftRearDrive.setPower(-.45);
-                    robot.rightRearDrive.setPower(-.45);
-                    telemetry.update();
-                    sleep(100);
-
-                    robot.leftFrontDrive.setPower(0);
-                    robot.rightFrontDrive.setPower(0);
-                    robot.leftRearDrive.setPower(0);
-                    robot.rightRearDrive.setPower(0);
-                }
-                if(position==3) {
-                    x=1;
-                    robot.leftFrontDrive.setPower(-.45);
-                    robot.rightFrontDrive.setPower(-.45);
-                    robot.leftRearDrive.setPower(-.45);
-                    robot.rightRearDrive.setPower(-.45);
-
-
-                    if(color==2)
-                    {
-                        sleep(1500);
-                    }else
-                        sleep(925);       // pause for servos to move
-
-                    robot.leftFrontDrive.setPower(0);
-                    robot.rightFrontDrive.setPower(0);
-                    robot.leftRearDrive.setPower(0);
-                    robot.rightRearDrive.setPower(0);
-
-                    sleep(500);
-
-                    do {
-                        angles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-                        z = AngleUnit.DEGREES.normalize(angles.firstAngle);
-                        if(z<0)
-                            z+=360;
-
-                        robot.leftFrontDrive.setPower(.25);
-                        robot.rightFrontDrive.setPower(-.25);
-                        robot.leftRearDrive.setPower(.25);
-                        robot.rightRearDrive.setPower(-.25);
-
-                        if(z-startZ<0&&startZ>180) {
-                            startZ-=360;
-                        }
-
-                    }while(z-startZ>95|z-startZ<85);
-                    robot.leftFrontDrive.setPower(0);
-                    robot.rightFrontDrive.setPower(0);
-                    robot.leftRearDrive.setPower(0);
-                    robot.rightRearDrive.setPower(0);
-
-                    sleep(360);// turn left
-
-                    robot.leftFrontDrive.setPower(.9);
-                    robot.rightFrontDrive.setPower(.9);
-                    robot.leftRearDrive.setPower(.9);
-                    robot.rightRearDrive.setPower(.9);
-
-
-                    sleep(275);     // pause for servos to move
-
-                    robot.leftFrontDrive.setPower(0);
-                    robot.rightFrontDrive.setPower(0);
-                    robot.leftRearDrive.setPower(0);
-                    robot.rightRearDrive.setPower(0);
-
-                    sleep(200);
-
-                    robot.stageTwo.setPower(.6);
-                    sleep(400);
-                    robot.stageTwo.setPower(0);
-                    telemetry.addData("Path", "Complete");
-                    telemetry.update();
-                    position=0;
-
-                    sleep(1000);
-
-                    robot.leftFrontDrive.setPower(-.25);
-                    robot.rightFrontDrive.setPower(-.25);
-                    robot.leftRearDrive.setPower(-.25);
-                    robot.rightRearDrive.setPower(-.25);
-
-
-                    sleep(500);
-
-                    robot.leftFrontDrive.setPower(0);
-                    robot.rightFrontDrive.setPower(0);
-                    robot.leftRearDrive.setPower(0);
-                    robot.rightRearDrive.setPower(0);
-
-                    sleep(300);
-
-                    robot.leftFrontDrive.setPower(.45);
-                    robot.rightFrontDrive.setPower(.45);
-                    robot.leftRearDrive.setPower(.45);
-                    robot.rightRearDrive.setPower(.45);
-
-                    sleep(850);
-
-                    robot.leftFrontDrive.setPower(0);
-                    robot.rightFrontDrive.setPower(0);
-                    robot.leftRearDrive.setPower(0);
-                    robot.rightRearDrive.setPower(0);
-
-                    sleep (200);
-
-                    robot.leftFrontDrive.setPower(-.45);
-                    robot.rightFrontDrive.setPower(-.45);
-                    robot.leftRearDrive.setPower(-.45);
-                    robot.rightRearDrive.setPower(-.45);
-                    telemetry.update();
-                    sleep(100);
-
-                    robot.leftFrontDrive.setPower(0);
-                    robot.rightFrontDrive.setPower(0);
-                    robot.leftRearDrive.setPower(0);
-                    robot.rightRearDrive.setPower(0);
-                }
-
             }
-
 
             telemetry.update();
         }
@@ -702,14 +279,524 @@ public class MainbotAutoRedLeftTest extends LinearOpMode {
     }
 
 
-    /**
-     * Drive using motor encoders
-     *
-     *
-     * @param speed
-     * @param leftInches
-     * @param rightInches
-     * @param timeoutS
-     */
 
+    public void hitJewel()
+    {
+        robot.colorDrop.setPosition(0.05);
+        sleep(2000);
+
+        Color.RGBToHSV((int) (robot.sensorColor.red() * SCALE_FACTOR),
+                (int) (robot.sensorColor.green() * SCALE_FACTOR),
+                (int) (robot.sensorColor.blue() * SCALE_FACTOR),
+                hsvValues);
+
+        if(robot.sensorColor.red()>robot.sensorColor.blue())
+        {
+            color=1;
+            robot.leftFrontDrive.setPower(-.25);
+            robot.rightFrontDrive.setPower(-.25);
+            robot.leftRearDrive.setPower(-.25);
+            robot.rightRearDrive.setPower(-.25);
+
+            sleep(250);
+
+            robot.leftFrontDrive.setPower(0);
+            robot.rightFrontDrive.setPower(0);
+            robot.leftRearDrive.setPower(0);
+            robot.rightRearDrive.setPower(0);
+            robot.colorDrop.setPosition(0.68);
+            sleep(600);
+        }
+        else
+        {
+
+            color=2;
+            robot.leftFrontDrive.setPower(-.25);
+            robot.rightFrontDrive.setPower(.25);
+            robot.leftRearDrive.setPower(-.25);
+            robot.rightRearDrive.setPower(.25);
+
+
+
+            sleep(100);
+            robot.leftFrontDrive.setPower(0);
+            robot.rightFrontDrive.setPower(0);
+            robot.leftRearDrive.setPower(0);
+            robot.rightRearDrive.setPower(0);
+            robot.colorDrop.setPosition(0.68);
+            sleep(500);
+
+            robot.leftFrontDrive.setPower(.25);
+            robot.rightFrontDrive.setPower(-.25);
+            robot.leftRearDrive.setPower(.25);
+            robot.rightRearDrive.setPower(-.25);
+
+            sleep(100);
+            robot.leftFrontDrive.setPower(0);
+            robot.rightFrontDrive.setPower(0);
+            robot.leftRearDrive.setPower(0);
+            robot.rightRearDrive.setPower(0);
+            sleep(600);
+
+        }
+    }
+
+    public void driveToScore() {
+        x = 1;
+        //drive until off platform
+        robot.leftFrontDrive.setPower(-.45);
+        robot.rightFrontDrive.setPower(-.45);
+        robot.leftRearDrive.setPower(-.45);
+        robot.rightRearDrive.setPower(-.45);
+        if (color == 1)
+            sleep(200);
+        else if (color == 2)
+            sleep(600);
+        robot.leftFrontDrive.setPower(0);
+        robot.rightFrontDrive.setPower(0);
+        robot.leftRearDrive.setPower(0);
+        robot.rightRearDrive.setPower(0);
+        sleep(100);
+        //rotate to face wall
+        do {
+            angles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+            z = AngleUnit.DEGREES.normalize(angles.firstAngle);
+            if (z < 0)
+                z += 360;
+
+            robot.leftFrontDrive.setPower(.25);
+            robot.rightFrontDrive.setPower(-.25);
+            robot.leftRearDrive.setPower(.25);
+            robot.rightRearDrive.setPower(-.25);
+
+        } while (z - startZ > 75 || z - startZ < 71);
+        robot.leftFrontDrive.setPower(0);
+        robot.rightFrontDrive.setPower(0);
+        robot.leftRearDrive.setPower(0);
+        robot.rightRearDrive.setPower(0);
+        sleep(100);
+
+        //drive to wall
+        try {
+            do {
+                robot.leftFrontDrive.setPower(.25);
+                robot.rightFrontDrive.setPower(.25);
+                robot.leftRearDrive.setPower(.25);
+                robot.rightRearDrive.setPower(.25);
+
+
+                telemetry.addData("cm1", "%.2f cm", robot.rangeSensor1.getDistance(DistanceUnit.CM));//add try catch
+
+                telemetry.addData("cm2", "%.2f cm", robot.rangeSensor2.getDistance(DistanceUnit.CM));//add try catch
+
+                telemetry.update();
+
+            } while (robot.rangeSensor2.getDistance(DistanceUnit.CM) > 17);
+        } catch (Exception e) {
+            telemetry.addData("err", "distance2");//add try catch
+
+            telemetry.update();
+
+        }
+        robot.leftFrontDrive.setPower(0);
+        robot.rightFrontDrive.setPower(0);
+        robot.leftRearDrive.setPower(0);
+        robot.rightRearDrive.setPower(0);
+        sleep(100);
+        robot.leftFrontDrive.setPower(0);
+        robot.rightFrontDrive.setPower(-.2);
+        robot.leftRearDrive.setPower(0);
+        robot.rightRearDrive.setPower(-.2);
+        sleep(50);
+        //strafe until lined up
+        do {
+            robot.leftFrontDrive.setPower(.2);
+            robot.rightFrontDrive.setPower(-.2);
+            robot.leftRearDrive.setPower(-.25);
+            robot.rightRearDrive.setPower(.25);
+            telemetry.addData("cm1", "%.2f cm", robot.rangeSensor1.getDistance(DistanceUnit.CM));//add try catch
+
+            telemetry.addData("cm2", "%.2f cm", robot.rangeSensor2.getDistance(DistanceUnit.CM));//add try catch
+
+            telemetry.update();
+        } while (robot.rangeSensor2.getDistance(DistanceUnit.CM) > 12);
+        robot.leftFrontDrive.setPower(0);
+        robot.rightFrontDrive.setPower(0);
+        robot.leftRearDrive.setPower(0);
+        robot.rightRearDrive.setPower(0);
+        sleep(100);
+
+        robot.leftFrontDrive.setPower(.2);
+        robot.rightFrontDrive.setPower(-.2);
+        robot.leftRearDrive.setPower(-.2);
+        robot.rightRearDrive.setPower(.2);
+        sleep(150);
+
+        while (robot.rangeSensor1.getDistance(DistanceUnit.CM) > 12) {
+            robot.leftFrontDrive.setPower(0);
+            robot.rightFrontDrive.setPower(.2);
+            robot.leftRearDrive.setPower(0);
+            robot.rightRearDrive.setPower(.2);
+        }
+        robot.leftFrontDrive.setPower(0);
+        robot.rightFrontDrive.setPower(0);
+        robot.leftRearDrive.setPower(0);
+        robot.rightRearDrive.setPower(0);
+        sleep(100);
+
+        robot.leftFrontDrive.setPower(.25);
+        robot.rightFrontDrive.setPower(.25);
+        robot.leftRearDrive.setPower(.25);
+        robot.rightRearDrive.setPower(.25);
+        sleep(100);
+
+        robot.leftFrontDrive.setPower(0);
+        robot.rightFrontDrive.setPower(0);
+        robot.leftRearDrive.setPower(0);
+        robot.rightRearDrive.setPower(0);
+        sleep(100);
+
+
+        if (position == 1)     //Right Column
+        {
+
+        } else if (position == 2)     // Center Column
+        {
+
+            robot.leftFrontDrive.setPower(.35);
+            robot.rightFrontDrive.setPower(-.35);
+            robot.leftRearDrive.setPower(-.35);
+            robot.rightRearDrive.setPower(.35);
+            sleep(500);
+
+            do {
+                robot.leftFrontDrive.setPower(.2);
+                robot.rightFrontDrive.setPower(-.2);
+                robot.leftRearDrive.setPower(-.25);
+                robot.rightRearDrive.setPower(.25);
+                telemetry.addData("cm1", "%.2f cm", robot.rangeSensor1.getDistance(DistanceUnit.CM));//add try catch
+
+                telemetry.addData("cm2", "%.2f cm", robot.rangeSensor2.getDistance(DistanceUnit.CM));//add try catch
+
+                telemetry.update();
+            } while (robot.rangeSensor2.getDistance(DistanceUnit.CM) > 14);
+            robot.leftFrontDrive.setPower(0);
+            robot.rightFrontDrive.setPower(0);
+            robot.leftRearDrive.setPower(0);
+            robot.rightRearDrive.setPower(0);
+            sleep(100);
+
+            robot.leftFrontDrive.setPower(.2);
+            robot.rightFrontDrive.setPower(-.2);
+            robot.leftRearDrive.setPower(-.2);
+            robot.rightRearDrive.setPower(.2);
+            sleep(150);
+
+            while (robot.rangeSensor1.getDistance(DistanceUnit.CM) > 17) {
+                robot.leftFrontDrive.setPower(0);
+                robot.rightFrontDrive.setPower(.2);
+                robot.leftRearDrive.setPower(0);
+                robot.rightRearDrive.setPower(.2);
+            }
+            robot.leftFrontDrive.setPower(0);
+            robot.rightFrontDrive.setPower(0);
+            robot.leftRearDrive.setPower(0);
+            robot.rightRearDrive.setPower(0);
+            sleep(100);
+        }
+        robot.leftFrontDrive.setPower(.25);
+        robot.rightFrontDrive.setPower(.25);
+        robot.leftRearDrive.setPower(.25);
+        robot.rightRearDrive.setPower(.25);
+        sleep(100);
+
+        robot.leftFrontDrive.setPower(0);
+        robot.rightFrontDrive.setPower(0);
+        robot.leftRearDrive.setPower(0);
+        robot.rightRearDrive.setPower(0);
+        sleep(100);
+
+        if (position==3)     // Left Column
+        {
+            robot.leftFrontDrive.setPower(.35);
+            robot.rightFrontDrive.setPower(-.35);
+            robot.leftRearDrive.setPower(-.35);
+            robot.rightRearDrive.setPower(.35);
+            sleep (500);
+
+            do {
+                robot.leftFrontDrive.setPower(.2);
+                robot.rightFrontDrive.setPower(-.2);
+                robot.leftRearDrive.setPower(-.25);
+                robot.rightRearDrive.setPower(.25);
+                telemetry.addData("cm1", "%.2f cm", robot.rangeSensor1.getDistance(DistanceUnit.CM));//add try catch
+
+                telemetry.addData("cm2", "%.2f cm", robot.rangeSensor2.getDistance(DistanceUnit.CM));//add try catch
+
+                telemetry.update();
+            }while(robot.rangeSensor2.getDistance(DistanceUnit.CM)>14);
+            robot.leftFrontDrive.setPower(0);
+            robot.rightFrontDrive.setPower(0);
+            robot.leftRearDrive.setPower(0);
+            robot.rightRearDrive.setPower(0);
+            sleep(100);
+
+            robot.leftFrontDrive.setPower(.2);
+            robot.rightFrontDrive.setPower(-.2);
+            robot.leftRearDrive.setPower(-.25);
+            robot.rightRearDrive.setPower(.25);
+            sleep(150);
+            while(robot.rangeSensor1.getDistance(DistanceUnit.CM)>14){
+                robot.leftFrontDrive.setPower(0);
+                robot.rightFrontDrive.setPower(.2);
+                robot.leftRearDrive.setPower(0);
+                robot.rightRearDrive.setPower(.2);
+            }
+            robot.leftFrontDrive.setPower(0);
+            robot.rightFrontDrive.setPower(0);
+            robot.leftRearDrive.setPower(0);
+            robot.rightRearDrive.setPower(0);
+            sleep(100);
+
+            robot.leftFrontDrive.setPower(0);
+            robot.rightFrontDrive.setPower(-.25);
+            robot.leftRearDrive.setPower(0);
+            robot.rightRearDrive.setPower(-.25);
+            sleep(50);
+
+            robot.leftFrontDrive.setPower(0);
+            robot.rightFrontDrive.setPower(0);
+            robot.leftRearDrive.setPower(0);
+            robot.rightRearDrive.setPower(0);
+            sleep(100);
+
+            robot.leftFrontDrive.setPower(.35);
+            robot.rightFrontDrive.setPower(-.35);
+            robot.leftRearDrive.setPower(-.35);
+            robot.rightRearDrive.setPower(.35);
+            sleep (500);
+
+            do {
+                robot.leftFrontDrive.setPower(.2);
+                robot.rightFrontDrive.setPower(-.2);
+                robot.leftRearDrive.setPower(-.25);
+                robot.rightRearDrive.setPower(.25);
+                telemetry.addData("cm1", "%.2f cm", robot.rangeSensor1.getDistance(DistanceUnit.CM));//add try catch
+
+                telemetry.addData("cm2", "%.2f cm", robot.rangeSensor2.getDistance(DistanceUnit.CM));//add try catch
+
+                telemetry.update();
+            }while(robot.rangeSensor2.getDistance(DistanceUnit.CM)>17);
+            robot.leftFrontDrive.setPower(0);
+            robot.rightFrontDrive.setPower(0);
+            robot.leftRearDrive.setPower(0);
+            robot.rightRearDrive.setPower(0);
+            sleep(500);
+
+            while(robot.rangeSensor1.getDistance(DistanceUnit.CM)>17){
+                robot.leftFrontDrive.setPower(0);
+                robot.rightFrontDrive.setPower(.2);
+                robot.leftRearDrive.setPower(0);
+                robot.rightRearDrive.setPower(.2);
+            }
+            robot.leftFrontDrive.setPower(0);
+            robot.rightFrontDrive.setPower(0);
+            robot.leftRearDrive.setPower(0);
+            robot.rightRearDrive.setPower(0);
+            sleep(100);
+
+            robot.leftFrontDrive.setPower(.15);
+            robot.rightFrontDrive.setPower(-.15);
+            robot.leftRearDrive.setPower(-.15);
+            robot.rightRearDrive.setPower(.15);
+            sleep (100);
+
+            robot.leftFrontDrive.setPower(0);
+            robot.rightFrontDrive.setPower(0);
+            robot.leftRearDrive.setPower(0);
+            robot.rightRearDrive.setPower(0);
+            sleep(100);
+        }
+
+        robot.stageTwo.setPower(.6);
+        sleep(1000);
+        robot.stageTwo.setPower(0);
+
+        robot.leftFrontDrive.setPower(-.2);
+        robot.rightFrontDrive.setPower(-.2);
+        robot.leftRearDrive.setPower(-.2);
+        robot.rightRearDrive.setPower(-.2);
+        sleep(450);
+        robot.stageTwo.setPower(-.6);
+        robot.leftFrontDrive.setPower(0);
+        robot.rightFrontDrive.setPower(0);
+        robot.leftRearDrive.setPower(0);
+        robot.rightRearDrive.setPower(0);
+        sleep(100);
+        robot.leftFrontDrive.setPower(.45);
+        robot.rightFrontDrive.setPower(.45);
+        robot.leftRearDrive.setPower(.45);
+        robot.rightRearDrive.setPower(.45);
+        sleep(300);
+        robot.stageTwo.setPower(0);
+        robot.leftFrontDrive.setPower(0);
+        robot.rightFrontDrive.setPower(0);
+        robot.leftRearDrive.setPower(0);
+        robot.rightRearDrive.setPower(0);
+        sleep(100);
+        robot.leftFrontDrive.setPower(-.25);
+        robot.rightFrontDrive.setPower(-.25);
+        robot.leftRearDrive.setPower(-.25);
+        robot.rightRearDrive.setPower(-.25);
+        sleep(200);
+        robot.leftFrontDrive.setPower(0);
+        robot.rightFrontDrive.setPower(0);
+        robot.leftRearDrive.setPower(0);
+        robot.rightRearDrive.setPower(0);
+        sleep(100);
+
+
+        //forward, back up
+    }
+
+    public void extraGlyph()
+    {
+        robot.leftStageOne.setPower(1);
+        robot.rightStageOne.setPower(1);
+
+        robot.leftFrontDrive.setPower(-.45);
+        robot.rightFrontDrive.setPower(-.45);
+        robot.leftRearDrive.setPower(-.45);
+        robot.rightRearDrive.setPower(-.45);
+        sleep(2000);
+        robot.leftFrontDrive.setPower(0);
+        robot.rightFrontDrive.setPower(0);
+        robot.leftRearDrive.setPower(0);
+        robot.rightRearDrive.setPower(0);
+        sleep (100);
+        do {
+            angles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+            z = AngleUnit.DEGREES.normalize(angles.firstAngle);
+            if (z < 0)
+                z += 360;
+
+            robot.leftFrontDrive.setPower(-.25);
+            robot.rightFrontDrive.setPower(.25);
+            robot.leftRearDrive.setPower(-.25);
+            robot.rightRearDrive.setPower(.25);
+
+        } while (z - startZ > 75 || z - startZ < 71);
+        {
+            robot.leftFrontDrive.setPower(0);
+            robot.rightFrontDrive.setPower(0);
+            robot.leftRearDrive.setPower(0);
+            robot.rightRearDrive.setPower(0);
+            sleep(100);
+        }
+
+        try {
+            do {
+                robot.leftFrontDrive.setPower(.25);
+                robot.rightFrontDrive.setPower(.25);
+                robot.leftRearDrive.setPower(.25);
+                robot.rightRearDrive.setPower(.25);
+
+
+                telemetry.addData("cm1", "%.2f cm", robot.rangeSensor1.getDistance(DistanceUnit.CM));//add try catch
+
+                telemetry.addData("cm2", "%.2f cm", robot.rangeSensor2.getDistance(DistanceUnit.CM));//add try catch
+
+                telemetry.update();
+
+            } while (robot.rangeSensor2.getDistance(DistanceUnit.CM) > 30);
+        } catch (Exception e) {
+            telemetry.addData("err", "distance2");//add try catch
+
+            telemetry.update();
+
+        }
+        robot.leftFrontDrive.setPower(0);
+        robot.rightFrontDrive.setPower(0);
+        robot.leftRearDrive.setPower(0);
+        robot.rightRearDrive.setPower(0);
+        sleep(100);
+        robot.leftFrontDrive.setPower(0);
+        robot.rightFrontDrive.setPower(-.2);
+        robot.leftRearDrive.setPower(0);
+        robot.rightRearDrive.setPower(-.2);
+        sleep(50);
+        //strafe until lined up
+        do {
+            robot.leftFrontDrive.setPower(.2);
+            robot.rightFrontDrive.setPower(-.2);
+            robot.leftRearDrive.setPower(-.25);
+            robot.rightRearDrive.setPower(.25);
+            telemetry.addData("cm1", "%.2f cm", robot.rangeSensor1.getDistance(DistanceUnit.CM));//add try catch
+
+            telemetry.addData("cm2", "%.2f cm", robot.rangeSensor2.getDistance(DistanceUnit.CM));//add try catch
+
+            telemetry.update();
+        } while (robot.rangeSensor2.getDistance(DistanceUnit.CM) > 12);
+        robot.leftFrontDrive.setPower(0);
+        robot.rightFrontDrive.setPower(0);
+        robot.leftRearDrive.setPower(0);
+        robot.rightRearDrive.setPower(0);
+        sleep(100);
+
+        robot.leftFrontDrive.setPower(.2);
+        robot.rightFrontDrive.setPower(-.2);
+        robot.leftRearDrive.setPower(-.2);
+        robot.rightRearDrive.setPower(.2);
+        sleep(150);
+
+        robot.stageTwo.setPower(.6);
+        sleep(500);
+        robot.stageTwo.setPower(0);
+
+        robot.leftFrontDrive.setPower(-.2);
+        robot.rightFrontDrive.setPower(-.2);
+        robot.leftRearDrive.setPower(-.2);
+        robot.rightRearDrive.setPower(-.2);
+        sleep(200);
+        robot.stageTwo.setPower(-.6);
+        robot.leftFrontDrive.setPower(0);
+        robot.rightFrontDrive.setPower(0);
+        robot.leftRearDrive.setPower(0);
+        robot.rightRearDrive.setPower(0);
+        sleep(200);
+        robot.leftStageOne.setPower(0);
+        robot.rightStageOne.setPower(0);
+        robot.leftFrontDrive.setPower(.45);
+        robot.rightFrontDrive.setPower(.45);
+        robot.leftRearDrive.setPower(.45);
+        robot.rightRearDrive.setPower(.45);
+        sleep(300);
+        robot.stageTwo.setPower(0);
+        robot.leftFrontDrive.setPower(0);
+        robot.rightFrontDrive.setPower(0);
+        robot.leftRearDrive.setPower(0);
+        robot.rightRearDrive.setPower(0);
+        sleep(200);
+        robot.leftFrontDrive.setPower(-.25);
+        robot.rightFrontDrive.setPower(-.25);
+        robot.leftRearDrive.setPower(-.25);
+        robot.rightRearDrive.setPower(-.25);
+        sleep(200);
+        robot.leftFrontDrive.setPower(0);
+        robot.rightFrontDrive.setPower(0);
+        robot.leftRearDrive.setPower(0);
+        robot.rightRearDrive.setPower(0);
+        sleep(200);
+        robot.leftFrontDrive.setPower(.25);
+        robot.rightFrontDrive.setPower(.25);
+        robot.leftRearDrive.setPower(.25);
+        robot.rightRearDrive.setPower(.25);
+        sleep(200);
+        robot.leftFrontDrive.setPower(0);
+        robot.rightFrontDrive.setPower(0);
+        robot.leftRearDrive.setPower(0);
+        robot.rightRearDrive.setPower(0);
+        sleep (200);
+
+    }
 }

@@ -72,6 +72,7 @@ public class MainTeleopTest extends OpMode{
     // sometimes it helps to multiply the raw RGB values with a scale factor
     // to amplify/attentuate the measured values.
     final double SCALE_FACTOR = 255;
+    double servo =0;
     /*
      * Code to run ONCE when the driver hits INIT
      */
@@ -242,6 +243,21 @@ public class MainTeleopTest extends OpMode{
             robot.leftStageOne.setPower(0);
         }
 
+        if ((gamepad2.right_trigger >0)) {//Left Trigger move the wheels to collect glyphs
+            robot.leftStageOne.setPower(1);
+            robot.rightStageOne.setPower(1);
+        }
+
+        else if ((gamepad2.left_trigger >0)) {//Right trigger move wheels to spit out glyphs
+            robot.leftStageOne.setPower(-1);
+            robot.rightStageOne.setPower(-1);
+        }
+
+        else {// if not hitting either trigger stop wheels
+            robot.rightStageOne.setPower(0);
+            robot.leftStageOne.setPower(0);
+        }
+
 
         if(gamepad1.dpad_left) {//DPad left puts in alignment rod
             robot.align.setPosition(.43);
@@ -274,6 +290,36 @@ public class MainTeleopTest extends OpMode{
             robot.stageTwo.setPower(0);
         }
 
+        if(gamepad2.y&&servo<.7)
+        {
+            //IncreASE COUNTER
+            servo=servo+.01;
+            robot.relic.setPosition(servo);
+
+        }
+        if(gamepad2.a&&servo>0)
+        {
+            //decreASE COUNTER
+            servo=servo-.01;
+            robot.relic.setPosition(servo);
+
+        }
+
+        if(gamepad2.dpad_up)
+        {
+            robot.stageThree.setPower(.5);
+            telemetry.addData("DpadUP: ",gamepad2.dpad_up);
+        }
+        else if(gamepad2.dpad_down)
+        {
+            telemetry.addData("Dpaddown: ",gamepad2.dpad_down);
+            robot.stageThree.setPower(-.5);
+        }
+        else
+        {
+            robot.stageThree.setPower(0);
+        }
+        /*
         try {
 
 
@@ -288,8 +334,8 @@ public class MainTeleopTest extends OpMode{
             catch(Exception e)
             {
                 telemetry.addData("Error: ", "US");
-            }
-
+            }*/
+        telemetry.addData("Servo: ", servo);
         telemetry.update();
     }
 

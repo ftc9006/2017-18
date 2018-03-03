@@ -27,6 +27,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package org.firstinspires.ftc.teamcode;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import android.graphics.Color;
 
@@ -69,7 +70,7 @@ import java.util.Locale;
  */
 
 @Autonomous(name="Mainbot: Red Auto Right", group ="Concept")
-//@Disabled
+@Disabled
 public class MainbotAutoRedRightTest extends LinearOpMode {
 
     public static final String TAG = "Vuforia VuMark Sample";

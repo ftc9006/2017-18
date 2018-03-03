@@ -50,6 +50,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import java.util.Locale;
 
@@ -70,7 +71,7 @@ import java.util.Locale;
  */
 
 @Autonomous(name="Mainbot: Blue Auto Right", group ="Concept")
-//@Disabled
+@Disabled
 public class MainbotAutoBlueRightTest extends LinearOpMode {
 
     public static final String TAG = "Vuforia VuMark Sample";
